@@ -1,5 +1,8 @@
 # Eilmer of Malmesbury: a flight-feasibility study
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20706321.svg)](https://doi.org/10.5281/zenodo.20706321)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A reproducible engineering analysis of the ~11th-century glide of Eilmer of
 Malmesbury, reported by William of Malmesbury in the *Gesta Regum Anglorum*: a
 monk who fixed wings to his hands and feet, glided from a tower for "more than a

@@ -8,6 +8,7 @@ authors:
     affiliation: Remiza
 date-released: 2026-06-15
 license: MIT
+doi: "10.5281/zenodo.20706321"
 repository-code: "https://github.com/silverdavi/eilmer-flight-feasibility"
 keywords:
   - flight biomechanics
