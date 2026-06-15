@@ -1,0 +1,29 @@
+{
+  "n_samples": 40000,
+  "seed": 42,
+  "wind_source": "ERA5 SW-sector launchable speeds (Workstream B)",
+  "p_reach_200m": [
+    0.267,
+    0.263,
+    0.272
+  ],
+  "p_reached_and_departed_no_tail": [
+    0.267,
+    0.263,
+    0.272
+  ],
+  "p_reached_and_controlled_no_tail": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "p_reached_and_controlled_with_tail": [
+    0.267,
+    0.263,
+    0.272
+  ],
+  "p_departed_given_reached_no_tail": 1.0,
+  "p_departed_given_reached_with_tail": 0.0,
+  "median_range_m": 147.0,
+  "median_range_reached_pct": 26.7
+}

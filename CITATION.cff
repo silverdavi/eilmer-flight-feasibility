@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite the paper below."
+title: "Wind, slope, and the want of a tail: a computational feasibility study of Eilmer of Malmesbury's flight"
+authors:
+  - family-names: Silver
+    given-names: David H.
+    orcid: "https://orcid.org/0000-0002-3071-304X"
+    affiliation: Remiza
+date-released: 2026-06-15
+license: MIT
+repository-code: "https://github.com/silverdavi/eilmer-flight-feasibility"
+keywords:
+  - flight biomechanics
+  - glide aerodynamics
+  - pitch stability
+  - ridge lift
+  - history of technology
+  - Monte Carlo

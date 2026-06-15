@@ -1,0 +1,17 @@
+{
+  "data_source": "AWS Terrain Tiles (terrarium), zoom 14, ~6 m/px",
+  "m_per_px": [
+    5.94,
+    5.9
+  ],
+  "abbey_elev_m": 79.8,
+  "section_valley_min_m": 69.5,
+  "relief_abbey_above_valley_m": 10.2,
+  "slope_radius_m": 400.0,
+  "slope_mean_deg": 5.18,
+  "slope_p90_deg": 12.83,
+  "slope_max_deg": 28.06,
+  "aspect_deg": 230.5,
+  "aspect_compass": "SW",
+  "sw_windward": true
+}

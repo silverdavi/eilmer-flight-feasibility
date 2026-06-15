@@ -1,0 +1,19 @@
+{
+  "mass_kg": 80.0,
+  "leg_fracture_per_leg_kN": [
+    7.5,
+    11.3
+  ],
+  "stop_distance_mid_m": 0.2,
+  "fracture_onset_speed_mid_ms": 9.7,
+  "fracture_onset_speed_range_ms": [
+    11.5,
+    7.5
+  ],
+  "median_departure_vertical_speed_ms": 10.5,
+  "p_legs_break_if_departed": 0.66,
+  "p_legs_break_if_flared": 0.0,
+  "median_departure_decel_g": 28.0,
+  "survivable_feet_first": true,
+  "reading": "departure impact breaks both legs but is survivable feet-first; a flared landing would not break them, so the injuries imply an uncontrolled arrival (no tail)"
+}

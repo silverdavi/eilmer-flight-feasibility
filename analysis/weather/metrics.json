@@ -1,0 +1,56 @@
+{
+  "data_source": "ERA5 hourly 10 m wind via Open-Meteo archive",
+  "n_hours": 175320,
+  "n_years": 20,
+  "sector_deg": [
+    191.25,
+    258.75
+  ],
+  "speed_band_ms": [
+    5.0,
+    12.0
+  ],
+  "favourable_pct_annual": {
+    "mean": 15.63,
+    "ci95": [
+      14.27,
+      16.99
+    ]
+  },
+  "favourable_hours_per_year": {
+    "mean": 1370.0,
+    "min": 689,
+    "max": 1869
+  },
+  "sw_sector_any_speed_pct": 34.3,
+  "favourable_pct_by_season": {
+    "DJF": {
+      "mean": 21.07,
+      "ci95": [
+        17.57,
+        24.57
+      ]
+    },
+    "MAM": {
+      "mean": 12.05,
+      "ci95": [
+        10.56,
+        13.53
+      ]
+    },
+    "JJA": {
+      "mean": 13.55,
+      "ci95": [
+        11.54,
+        15.57
+      ]
+    },
+    "SON": {
+      "mean": 15.96,
+      "ci95": [
+        14.29,
+        17.63
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "inputs": {
+    "mass_kg": 80.0,
+    "wing_area_m2": 7.0,
+    "launch_h_m": 18.0,
+    "glide_speed_ms": 15.1,
+    "escarpment_slope_deg_p90": 12.83,
+    "crude_ld_band": [
+      3.0,
+      7.0
+    ]
+  },
+  "glide": {
+    "ld_needed_still_air": 11.1,
+    "ld_needed_at_8ms": 4.8,
+    "min_wind_for_crude_wing_ms": 3.6
+  },
+  "stability": {
+    "np_notail": 0.25,
+    "np_tail": 0.53,
+    "cg_plausible": [
+      0.35,
+      0.55
+    ],
+    "representative_cg": 0.45,
+    "flight_time_s": 13.3,
+    "control_loss_deg": 60.0,
+    "notail_time_to_control_loss_s": 0.74,
+    "notail_time_to_double_s": 0.24,
+    "tail_stable_at_rep_cg": true
+  }
+}
