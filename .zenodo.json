@@ -1,0 +1,22 @@
+{
+  "title": "Wind, slope, and the want of a tail: a computational feasibility study of Eilmer of Malmesbury's flight",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT",
+  "description": "Reproducible engineering analysis of the ~11th-century glide of Eilmer of Malmesbury. The pipeline reconstructs the launch terrain, builds a wind climatology from ERA5 reanalysis, models orographic ridge lift, runs a glide and pitch-stability analysis, a Monte Carlo over the unknown apparatus and launch day, and an impact-biomechanics model, then compiles the LaTeX manuscript. Every figure and number rebuilds from public, keyless data sources (ECMWF ERA5 via Open-Meteo; AWS Terrain Tiles) with a single command (run_all.sh).",
+  "creators": [
+    {
+      "name": "Silver, David H.",
+      "orcid": "0000-0002-3071-304X",
+      "affiliation": "Remiza"
+    }
+  ],
+  "keywords": [
+    "flight biomechanics",
+    "glide aerodynamics",
+    "pitch stability",
+    "ridge lift",
+    "history of technology",
+    "Monte Carlo"
+  ]
+}
