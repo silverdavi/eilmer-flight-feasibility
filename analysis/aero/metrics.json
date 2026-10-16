@@ -3,17 +3,62 @@
     "mass_kg": 80.0,
     "wing_area_m2": 7.0,
     "launch_h_m": 18.0,
+    "cl_trim": 0.8,
+    "jump_speed_ms": 2.0,
     "glide_speed_ms": 15.1,
-    "escarpment_slope_deg_p90": 12.83,
-    "crude_ld_band": [
+    "escarpment_slope_deg_p90": 12.83
+  },
+  "drag_polar": {
+    "aspect_ratio": [
       3.0,
-      7.0
-    ]
+      5.0
+    ],
+    "oswald_e": [
+      0.6,
+      0.8
+    ],
+    "cd0": [
+      0.05,
+      0.15
+    ],
+    "ld_max_band": [
+      3.1,
+      7.9
+    ],
+    "ld_max_nominal": 4.7
+  },
+  "site": {
+    "lift_extent_into_wind_m": 40.0,
+    "lift_extent_along_slope_m": 192.0,
+    "along_slope_contour_m": -5.1,
+    "valley_drop_sw_m": 9.2
   },
   "glide": {
-    "ld_needed_still_air": 11.1,
-    "ld_needed_at_8ms": 4.8,
-    "min_wind_for_crude_wing_ms": 3.6
+    "ld_needed_still_air_steady": 11.1,
+    "height_to_trim_speed_still_air_m": 11.5,
+    "still_air_range_best_m": 14.0,
+    "still_air_range_best_steady_m": 142.0,
+    "max_range_into_wind_m": 110.0,
+    "min_wind_for_200m_ms": {
+      "into_wind_low": null,
+      "into_wind_nominal": null,
+      "into_wind_high": null,
+      "along_slope_low": null,
+      "along_slope_nominal": 10.6,
+      "along_slope_high": 5.7
+    },
+    "range_at_8ms_along_slope_m": {
+      "low": 49.0,
+      "nominal": 111.0,
+      "high": 271.0
+    },
+    "range_at_8ms_into_wind_m": {
+      "low": 41.0,
+      "nominal": 60.0,
+      "high": 104.0
+    },
+    "min_wind_best_tower15_ms": 6.6,
+    "min_wind_best_tower25_ms": 3.8
   },
   "stability": {
     "np_notail": 0.25,
@@ -23,10 +68,25 @@
       0.55
     ],
     "representative_cg": 0.45,
-    "flight_time_s": 13.3,
+    "flight_time_s": 15.8,
     "control_loss_deg": 60.0,
     "notail_time_to_control_loss_s": 0.74,
     "notail_time_to_double_s": 0.24,
+    "notail_time_to_double_band_s": [
+      0.12,
+      0.89
+    ],
+    "notail_time_to_double_nominal_band_s": [
+      0.16,
+      0.59
+    ],
+    "reaction_time_s": [
+      0.15,
+      0.3
+    ],
+    "cg_divergence_onset": 0.3,
+    "notail_time_to_double_at_cg_fwd_s": 0.6,
+    "notail_time_to_double_at_cg_aft_s": 0.16,
     "tail_stable_at_rep_cg": true
   }
 }

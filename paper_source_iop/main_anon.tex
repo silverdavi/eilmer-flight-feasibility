@@ -1,0 +1,6 @@
+% Blind build for double-anonymous review (European Journal of Physics / IOP).
+% Defines \anon, then includes the full IOP manuscript. This suppresses the author
+% block, the acknowledgements, and the repository links, and scrubs PDF metadata.
+% Compile: latexmk -pdf main_anon.tex
+\def\anon{}
+\input{main}

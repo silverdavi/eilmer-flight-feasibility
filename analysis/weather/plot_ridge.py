@@ -29,7 +29,7 @@ def main() -> None:
     f = np.load(FIELD)
     x, z, W = f["x"], f["z"], f["W"]
     terrain = f["terrain_rel"]
-    U = float(f["U"]); sink_band = f["sink_band"]
+    U = float(f["U"])
     m = json.loads(METRICS.read_text())
 
     fig, (axa, axb) = plt.subplots(1, 2, figsize=(12.5, 4.8),
@@ -39,10 +39,6 @@ def main() -> None:
     norm = TwoSlopeNorm(vmin=-2, vcenter=0, vmax=2)
     pcm = axa.contourf(x, z, W, levels=np.linspace(-2, 2, 21), cmap=LIFT_CMAP,
                        norm=norm, extend="both")
-    # soarable boundary: w == optimistic sink
-    cs = axa.contour(x, z, W, levels=[sink_band[0]], colors=[PALETTE["ink"]],
-                     linewidths=1.2, linestyles="--")
-    axa.clabel(cs, fmt=f"w = {sink_band[0]:.2f} m/s", fontsize=7)
     # terrain body
     axa.fill_between(x, terrain.min() - 5, terrain, color=PALETTE["shade"], zorder=3)
     axa.plot(x, terrain, color=PALETTE["ink"], lw=1.2, zorder=4)
@@ -68,19 +64,23 @@ def main() -> None:
     cb.ax.tick_params(labelsize=8)
     panel_label(axa, "a", dx=-0.04)
 
-    # b -- best lift vs height against the crude-glider sink band
-    axb.axvspan(sink_band[0], sink_band[1], color=PALETTE["slate"], alpha=0.18)
-    axb.plot(f["w_best_vs_z"], z, color=PALETTE["terracotta"], lw=2.4)
-    depth = m["soarable_layer_depth_m_at_sink1"]
-    axb.axhline(depth, color=PALETTE["ink"], lw=1, ls=":")
-    axb.text(0.05, depth + 4, f"working band ~{depth:.0f} m", fontsize=8, color=PALETTE["ink"])
-    axb.text(np.mean(sink_band), z.max() * 0.86, "crude-glider\nsink 0.75-2 m/s",
-             ha="center", fontsize=8, color=PALETTE["ink"])
+    # b -- peak lift vs height against the still-air sink of the nominal craft
+    axb.plot(f["w_best_vs_z"], z, color=PALETTE["terracotta"], lw=2.4,
+             label="linear model, peak column")
+    axb.plot(float(f["w_slope_formula"]), 0, "o", color=PALETTE["terracotta"], ms=7,
+             mfc="white", mew=1.6, clip_on=False, zorder=5, label="U sin(slope), p90 slope")
+    for key, ls in (("best", "--"), ("nominal", ":")):
+        s = float(f[f"sink_{key}"])
+        ld = float(f[f"ld_{key}"])
+        axb.axvline(s, color=PALETTE["ink"], lw=1.1, ls=ls)
+        axb.text(s + 0.05, z.max() * 0.93, f"sink at\nL/D {ld:.1f}\n{s:.1f} m/s",
+                 fontsize=7.5, color=PALETTE["ink"], va="top")
+    axb.legend(loc="center right", fontsize=7.5, frameon=False)
     axb.set_xlabel("vertical velocity w (m/s)")
     axb.set_ylabel("height above baseline (m)")
-    axb.set_title("Lift vs height on the\nwindward face")
+    axb.set_title(f"Peak lift vs height, {U:.0f} m/s wind")
     axb.set_ylim(0, z.max())
-    axb.set_xlim(0, max(2.2, float(np.nanmax(f["w_best_vs_z"])) * 1.1))
+    axb.set_xlim(0, float(f["sink_nominal"]) * 1.35)
     panel_label(axb, "b")
 
     fig.tight_layout()

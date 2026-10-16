@@ -8,18 +8,18 @@ venv/
 # OS
 .DS_Store
 
-# LaTeX build artefacts (main.pdf is committed; the rest regenerate)
-paper_source/*.aux
-paper_source/*.bbl
-paper_source/*.bcf
-paper_source/*.blg
-paper_source/*.fdb_latexmk
-paper_source/*.fls
-paper_source/*.log
-paper_source/*.out
-paper_source/*.run.xml
-paper_source/*.synctex.gz
-paper_source/sections/*.aux
+# LaTeX build artefacts (main.pdf and supplementary.pdf are committed)
+paper_source_iop/*.aux
+paper_source_iop/*.bbl
+paper_source_iop/*.bcf
+paper_source_iop/*.blg
+paper_source_iop/*.fdb_latexmk
+paper_source_iop/*.fls
+paper_source_iop/*.log
+paper_source_iop/*.out
+paper_source_iop/*.run.xml
+paper_source_iop/*.synctex.gz
+paper_source_iop/main_anon.pdf
 
 # Secrets / credentials
 .cdsapirc

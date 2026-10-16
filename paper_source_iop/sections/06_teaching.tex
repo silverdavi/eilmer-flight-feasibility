@@ -1,0 +1,58 @@
+\section{Using the study in teaching}
+\label{sec:teaching}
+
+The analysis divides into exercises that each use one topic from a first or second year
+mechanics course and one public data set or short script.
+They can be set singly, as problems, or together as a project in which students rebuild a
+figure and then change one assumption.
+Worked answers are in Supplementary S4.
+
+\begin{enumerate}
+  \item \textbf{Energy at launch.}
+  A glider leaves a tower of height \(H\) at \(v_0 = \SI{\nJump}{\meter\per\second}\) and needs
+  \(V = \SI{\nTrimSpeed}{\meter\per\second}\) to fly.
+  Ignoring drag, find the height lost in reaching \(V\).
+  How large a headwind makes the launch dive unnecessary?
+  Integrate \cref{eq:eom} numerically in still air and compare the range with the steady
+  glide estimate \(H\,(\LD)\).
+
+  \item \textbf{Glide ratio from a drag polar.}
+  Derive \cref{eq:polar} by minimising \(C_D/C_L\).
+  Evaluate it at the corners of the ranges in Supplementary \cref{tab:priors}.
+  Which parameter does the glide ratio depend on most, and which measurement on a model
+  wing would narrow it?
+
+  \item \textbf{Flight in a moving air mass.}
+  Draw the velocity triangle for a craft of airspeed \(V\) heading into a wind \(U\), and for
+  one crabbing along a track perpendicular to it.
+  Show that the ground speeds are \(V - U\) and \(\sqrt{V^2-U^2}\).
+  Explain why a headwind helps the launch and shortens the range on the first track.
+
+  \item \textbf{Ridge lift and sink.}
+  The upward air speed over a slope of angle \(\theta_s\) is about \(U\sin\theta_s\).
+  The still-air sink rate is \(V/\sqrt{1+(\LD)^2}\).
+  Find the wind at which the two are equal for \LD~\num{\nLDnom} and \LD~\num{\nLDhi} on a
+  slope of \ang{\nSlopePninety}, and compare the answers with the ERA5 wind distribution.
+
+  \item \textbf{Static and dynamic pitch stability.}
+  Write the two-state short-period model in angle of attack and pitch rate.
+  Show that a positive real eigenvalue appears when the CG moves aft of a point that depends
+  on the pitch damping, and compute the doubling time for the nominal craft at
+  \(\cgfrac = 0.45\).
+  Compare it with your own reaction time, measured with a ruler-drop test.
+
+  \item \textbf{Monte Carlo estimation.}
+  Rerun the Monte Carlo with a different seed and sample size.
+  Compute the Wilson interval for \nReachSlopeN\ successes in \nSamples\ trials by hand.
+  Change one range in \cref{tab:priors} and report how the reach fraction moves.
+
+  \item \textbf{Impact.}
+  From \cref{eq:impact}, find the vertical speed that breaks a tibia for stopping distances of
+  \SIrange{10}{35}{\centi\meter}.
+  Estimate the vertical speed of a craft flying at \(V\) along a path \ang{50} below horizontal,
+  and of one that glides into the ground at its sink rate.
+  What does each tell you about how Eilmer landed?
+\end{enumerate}
+
+Exercises 2 and 6 ask students to work with quantities nobody measured: to bound them from
+physical arguments, sample them, and find which conclusions change when a bound moves.

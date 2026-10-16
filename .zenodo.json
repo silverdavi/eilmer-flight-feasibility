@@ -3,7 +3,7 @@
   "upload_type": "software",
   "access_right": "open",
   "license": "MIT",
-  "description": "Reproducible engineering analysis of the ~11th-century glide of Eilmer of Malmesbury. The pipeline reconstructs the launch terrain, builds a wind climatology from ERA5 reanalysis, models orographic ridge lift, runs a glide and pitch-stability analysis, a Monte Carlo over the unknown apparatus and launch day, and an impact-biomechanics model, then compiles the LaTeX manuscript. Every figure and number rebuilds from public, keyless data sources (ECMWF ERA5 via Open-Meteo; AWS Terrain Tiles) with a single command (run_all.sh).",
+  "description": "Analysis code and LaTeX manuscript for a feasibility study of the eleventh-century flight of Eilmer of Malmesbury. The pipeline reconstructs the launch terrain, builds a wind climatology from ERA5 reanalysis, estimates ridge lift, integrates a standing-launch glide on two flight tracks, analyses pitch stability, runs a Monte Carlo over the unknown apparatus and launch day, and models the impact on the legs. Version 1.1.0 corrects the glide model of 1.0.0, which omitted the headwind from the ground speed and assumed the craft started at gliding speed; its results supersede those of 1.0.0.",
   "creators": [
     {
       "name": "Silver, David H.",
@@ -17,6 +17,8 @@
     "pitch stability",
     "ridge lift",
     "history of technology",
-    "Monte Carlo"
-  ]
+    "Monte Carlo",
+    "physics education"
+  ],
+  "version": "1.1.0"
 }

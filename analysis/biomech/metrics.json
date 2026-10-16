@@ -1,5 +1,6 @@
 {
   "mass_kg": 80.0,
+  "n_reached_samples": 2748,
   "leg_fracture_per_leg_kN": [
     7.5,
     11.3
@@ -7,13 +8,24 @@
   "stop_distance_mid_m": 0.2,
   "fracture_onset_speed_mid_ms": 9.7,
   "fracture_onset_speed_range_ms": [
-    11.5,
-    7.5
+    6.1,
+    14.1
   ],
-  "median_departure_vertical_speed_ms": 10.5,
-  "p_legs_break_if_departed": 0.66,
-  "p_legs_break_if_flared": 0.0,
-  "median_departure_decel_g": 28.0,
-  "survivable_feet_first": true,
-  "reading": "departure impact breaks both legs but is survivable feet-first; a flared landing would not break them, so the injuries imply an uncontrolled arrival (no tail)"
+  "controlled_vz_median_ms": 2.2,
+  "controlled_vz_p99_ms": 3.5,
+  "controlled_vz_max_ms": 4.1,
+  "median_departure_vertical_speed_ms": 10.1,
+  "depart_angle_deg": [
+    35.0,
+    70.0
+  ],
+  "airspeed_reached_ms": [
+    10.3,
+    19.4
+  ],
+  "p_legs_break_if_departed": 0.58,
+  "p_legs_break_if_controlled_unflared": 0.0,
+  "p_legs_break_if_controlled_unflared_weakest_legs": 0.0,
+  "median_departure_decel_g": 26.0,
+  "survivable_feet_first": true
 }

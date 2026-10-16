@@ -1,0 +1,70 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What the account requires}
+
+Read against the models, William's account describes a narrow set of conditions.
+A flight of a furlong from a tower of this height needs a strong southwest wind, a wing
+near the better end of what cloth and timber allow, and a track that stays over the
+slope.
+Flying straight out over the valley, the route \textcite{woosnam1986eilmer} proposed, does
+not reach \SI{200}{\meter} in any sampled case, because the headwind slows the craft over
+the ground and the lift ends at the foot of the slope.
+Flying along the slope reaches it in \SI{\nReachSlope}{\percent} of cases.
+Southwest winds of \SI{8}{\meter\per\second} or more blow for about \nSWEightHours\ hours a
+year, so a man who waited for one would not have waited long.
+William's phrase that Eilmer ``collected the breeze'' fits a launch timed to such a wind.
+
+Without a tail the craft diverges in pitch in a fraction of a second, but the doubling time
+is close to human reaction time rather than far below it.
+A pilot who moves his body could therefore hold the attitude for a while by continual
+correction, and a flight of tens of seconds followed by a loss of control is consistent
+with the model.
+The account names the trigger: the violence of the wind and the swirling of the air.
+A gust large enough to need a correction faster than his reactions would end the flight in
+under a second (\cref{fig:stability}a).
+The models do not show that he lost control, only that he would have been unlikely to keep
+it and that a tail would have removed the need to.
+
+The broken legs are consistent with a loss of control but do not prove one.
+A controlled glide into the ground without a flare arrives too slowly to break the legs in
+this model, so the injury requires a fast, steep arrival.
+A loss of pitch control gives that, but so would a stall at height or a dive into the
+ground that is not caused by the missing tail.
+
+\subsection{Which results depend on the assumptions}
+
+Three results follow from measurement or from simple bounds and would survive large
+changes to the model.
+The slope faces the prevailing wind, and strong southwest winds are measured to occur
+(\cref{fig:site,fig:wind}).
+The launch dive costs \((V^2-v_0^2)/2g\) of height whatever the wing, so a still-air flight
+of a furlong is not possible from this tower.
+A tailless wing is unstable in pitch whenever the CG is aft of about \num{\nCGonset}\,\(c\),
+and for a man fixed to the wing at his hands and feet the CG is near mid-chord.
+This last result holds if the sampled CG range brackets the real posture;
+\cref{fig:stability}b shows it would fail only if the pilot's mass centre lay ahead of
+\num{\nCGonset}\,\(c\), within the front of the chord near his hands.
+
+The fraction of cases reaching \SI{200}{\meter} depends on the ranges in Supplementary
+\cref{tab:priors}, and should be read as the share of the sampled ranges that works, not as
+a probability that the flight happened.
+It is most sensitive to the glide ratio and the strength and length of the ridge lift.
+The glide ratio rests on \cref{eq:polar} with bounds on aspect ratio, span efficiency, and
+drag, and every wing is flown at its best glide, which favours the account.
+The lift rests on a first-order model over a smoothed \SI{6}{\meter} terrain grid; the real
+slope is steeper than the grid shows, which would raise the lift, while turbulence and
+separation behind the spur edge would lower it.
+The point-mass model holds \(C_L\) fixed, so it does not let the pilot trade height for speed
+more efficiently than a stable glider would, and the pitch analysis treats the longitudinal
+motion alone.
+A large-eddy simulation over LIDAR terrain and a six-degree-of-freedom model with a pilot
+model would narrow these margins.
+
+\subsection{Limits of the comparison}
+
+The comparison with the text assumes that a furlong means about \SI{200}{\meter} of ground,
+that the tower stood at or near the abbey, and that William reports what Eilmer said.
+A shorter flight would be easier to explain; a tower on lower ground would be harder.
+None of the models tests whether the structure could carry the flight loads, which would be
+a separate failure mode.

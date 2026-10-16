@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+
+\input{preamble}
+\hypersetup{pdftitle={Wind, slope, and the want of a tail}}
+% Table S1, Figure S1 and Supplementary S1-S4 are labelled in supplementary.tex.
+\externaldocument{supplementary}
+
+
+\title{\bfseries Wind, slope, and the want of a tail:\\
+a computational feasibility study of Eilmer of Malmesbury's flight}
+
+% Author block per ~/dev/Rules/AUTHORSHIP.md. EJP uses double-anonymous review;
+% the named block is the default, and defining \anon (see main_anon.tex) produces
+% the blind build: no author block, no acknowledgements, no repository links.
+\ifdefined\anon
+  \author{}
+\else
+  \author{David H. Silver \\[3pt]
+    {\normalsize Remiza, Poughkeepsie, NY, USA} \\[1pt]
+    {\small Corresponding author: \texttt{david@remiza.ai} \,\textperiodcentered\, ORCID 0000-0002-3071-304X}}
+\fi
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+William of Malmesbury records that in the early eleventh century a monk of his abbey,
+Eilmer, fixed wings to his hands and feet, launched from a tower, travelled ``more than a
+furlong'' (about \SI{200}{\meter}), fell, broke both legs, and later blamed the fall on
+having no tail.
+This paper tests whether that account is consistent with elementary flight physics, using
+public data and methods at the level of an undergraduate mechanics course: a digital
+elevation model of the site, twenty years of reanalysis wind data, a slope-lift estimate, a
+point-mass glide integrated from a standing launch, a linear pitch-stability analysis, a
+Monte Carlo sample over the unknown apparatus and launch day, and an impact model for the
+legs.
+A glider leaving the tower at walking pace must lose about \SI{\nHeightToTrim}{\meter} of
+height to reach its \SI{\nTrimSpeed}{\meter\per\second} flying speed, so a long flight needs
+a strong wind.
+Flown out over the valley into that wind, none of \nSamples\ sampled cases covers
+\SI{200}{\meter}.
+Flown along the southwest-facing slope in ridge lift, \SI{\nReachSlope}{\percent} do
+(\SI{95}{\percent} confidence interval \numrange{\nReachSlopeLo}{\nReachSlopeHi}\,\%), with a
+median launch wind of \SI{\nMedWindReach}{\meter\per\second}.
+Without a tail the wing diverges in pitch, with a median doubling time of
+\SI{\nTdoubleMC}{\second}, comparable to human reaction time, during a flight of about
+\SI{\nMedFlightReach}{\second}; a tail removes the divergence.
+A controlled arrival, even without a flare, does not break the legs; an arrival after loss of
+pitch control often does.
+The account is physically possible but marginal, and the missing tail is a sufficient cause
+of the fall.
+Each step is posed as a student exercise, with worked answers.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_source_and_date}
+\input{sections/03_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_teaching}
+\input{sections/06_conclusion}
+
+\printbibliography
+
+
+\end{document}

@@ -29,11 +29,28 @@ echo "== Workstream E: impact biomechanics =="
 $PY analysis/biomech/process_biomech.py  # Fig 7 (needs montecarlo.npz)
 $PY analysis/biomech/plot_biomech.py
 
+if [ -d viz ]; then
+  echo "== Visualization: 3D web app scene and the apparatus render =="
+  $PY viz/export_scene.py                 # needs data/processed/malmesbury_dem.npz
+  $PY viz/preview_scene.py
+  # needs viz/figures/apparatus_3d.png (render_blender.py) and the cairo library (Homebrew)
+  DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib $PY viz/compose_apparatus.py
+  cp viz/figures/apparatus_hero.png figures/fig_apparatus.png
+else
+  echo "== viz/ not present: using the committed figures/fig_apparatus.png =="
+fi
+cp data/raw/photos/water_meadows.jpg figures/fig_abbey_photo.jpg   # CC BY-SA 2.0, see SOURCE.md
+
+echo "== Manuscript numbers: metrics.json -> paper_source_iop/numbers.tex =="
+$PY analysis/export_numbers.py
+
 echo "== Manuscript: compile LaTeX (needs TeX Live + biber) =="
 if command -v latexmk >/dev/null 2>&1; then
-  (cd paper_source && latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex)
+  # main.tex and supplementary.tex cross-reference each other (xr-hyper): main, supplement, main
+  (cd paper_source_iop && for t in main supplementary main main_anon; do
+     latexmk -pdf -interaction=nonstopmode -halt-on-error -g $t.tex || exit 1; done)
 else
   echo "latexmk not found; skipping paper build"
 fi
 
-echo "== done: see figures/ and paper_source/main.pdf =="
+echo "== done: see figures/ and paper_source_iop/main.pdf, supplementary.pdf, main_anon.pdf =="

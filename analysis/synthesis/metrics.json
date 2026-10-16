@@ -2,28 +2,71 @@
   "n_samples": 40000,
   "seed": 42,
   "wind_source": "ERA5 SW-sector launchable speeds (Workstream B)",
-  "p_reach_200m": [
-    0.267,
-    0.263,
-    0.272
+  "flight_model": "standing launch, point mass at fixed trim CL (analysis/aero/flight.py)",
+  "tracks": {
+    "into_wind": {
+      "p_reach_200m": [
+        0.0,
+        0.0,
+        0.0001
+      ],
+      "n_reach_200m": 0,
+      "median_range_m": 62.0,
+      "p90_range_m": 87.0,
+      "p_reached_and_controlled_no_tail": [
+        0.0,
+        0.0,
+        0.0001
+      ],
+      "p_reached_and_controlled_with_tail": [
+        0.0,
+        0.0,
+        0.0001
+      ],
+      "p_departed_given_reached_no_tail": null,
+      "p_departed_given_reached_with_tail": null,
+      "median_flight_time_reached_s": null,
+      "median_wind_reached_ms": null,
+      "p10_wind_reached_ms": null,
+      "median_ld_reached": null,
+      "median_ld_all": 4.7,
+      "p_landed_within_50m": 0.275
+    },
+    "along_slope": {
+      "p_reach_200m": [
+        0.0687,
+        0.0663,
+        0.0712
+      ],
+      "n_reach_200m": 2748,
+      "median_range_m": 83.0,
+      "p90_range_m": 180.0,
+      "p_reached_and_controlled_no_tail": [
+        0.0,
+        0.0,
+        0.0001
+      ],
+      "p_reached_and_controlled_with_tail": [
+        0.0687,
+        0.0663,
+        0.0712
+      ],
+      "p_departed_given_reached_no_tail": 1.0,
+      "p_departed_given_reached_with_tail": 0.0,
+      "median_flight_time_reached_s": 24.1,
+      "median_wind_reached_ms": 7.6,
+      "p10_wind_reached_ms": 5.4,
+      "median_ld_reached": 5.8,
+      "median_ld_all": 4.7,
+      "p_landed_within_50m": 0.341
+    }
+  },
+  "ld_from_polar": [
+    3.1,
+    7.8
   ],
-  "p_reached_and_departed_no_tail": [
-    0.267,
-    0.263,
-    0.272
-  ],
-  "p_reached_and_controlled_no_tail": [
-    0.0,
-    0.0,
-    0.0
-  ],
-  "p_reached_and_controlled_with_tail": [
-    0.267,
-    0.263,
-    0.272
-  ],
-  "p_departed_given_reached_no_tail": 1.0,
-  "p_departed_given_reached_with_tail": 0.0,
-  "median_range_m": 147.0,
-  "median_range_reached_pct": 26.7
+  "notail_t2_median_reached_s": 0.29,
+  "notail_t2_p99_reached_s": 1.62,
+  "notail_t2_median_all_s": 0.26,
+  "p_tail_stable_all": 1.0
 }

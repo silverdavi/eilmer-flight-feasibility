@@ -27,8 +27,8 @@ METRICS = Path(__file__).resolve().parent / "ridge_metrics.json"
 U_WIND = 8.0          # incoming SW wind (m/s), favourable-band mean
 L_SCALE = 600.0       # escarpment horizontal scale (m); decay k = 2*pi/L
 Z_TOP = 150.0         # height above baseline (m)
-SINK_REF = 1.0        # representative crude-glider sink rate (m/s)
-SINK_BAND = (0.75, 2.0)      # crude-glider sink range (hang-glider class)
+AERO_METRICS = ROOT / "analysis" / "aero" / "metrics.json"
+TERRAIN_METRICS = ROOT / "analysis" / "terrain" / "metrics.json"
 SMOOTH_M = 42.0       # along-wind smoothing window for the slope (m)
 X_WINDOW = (-700.0, 500.0)   # launch-relevant span around the abbey (m)
 SLOPE_CAP = 0.60      # |dh/dx| cap (~31 deg); the coarse DEM spikes are artefacts
@@ -81,24 +81,34 @@ def main() -> None:
     wind_mask = (x >= WINDWARD[0]) & (x <= WINDWARD[1])
     ix_max = int(np.arange(len(x))[wind_mask][np.argmax(w_surface[wind_mask])])
     w_best_vs_z = U_WIND * dhdx[ix_max] * np.exp(-k * z)
-    soar_depth = float(z[w_best_vs_z >= SINK_REF].max()) if (w_best_vs_z >= SINK_REF).any() else 0.0
+
+    # still-air sink of the nominal craft at trim, V / sqrt(1 + (L/D)^2), for the
+    # best and nominal wings of the drag-polar band (Workstream C)
+    aero = json.loads(AERO_METRICS.read_text())
+    V = aero["inputs"]["glide_speed_ms"]
+    ld_best, ld_nom = aero["drag_polar"]["ld_max_band"][1], aero["drag_polar"]["ld_max_nominal"]
+    sink = {"best": V / np.sqrt(1 + ld_best**2), "nominal": V / np.sqrt(1 + ld_nom**2)}
+    slope_p90 = json.loads(TERRAIN_METRICS.read_text())["slope_p90_deg"]
+    w_slope_formula = U_WIND * np.sin(np.radians(slope_p90))
+    w_peak = float(w_surface[ix_max])
 
     np.savez_compressed(
         OUT, x=x, z=z, W=Wm, elev=elev, terrain_rel=terrain_rel, base=base,
         streams=streams, stream_starts=np.array(starts),
-        U=U_WIND, L=L_SCALE, sink_ref=SINK_REF, sink_band=np.array(SINK_BAND),
+        U=U_WIND, L=L_SCALE, sink_best=sink["best"], sink_nominal=sink["nominal"],
+        ld_best=ld_best, ld_nominal=ld_nom, w_slope_formula=w_slope_formula,
         w_best_vs_z=w_best_vs_z, x_max_lift=x[ix_max])
 
     metrics = {
         "model": "linear orographic, w = U dh/dx exp(-k z); Phase-1 stand-in for LES/WAsP",
         "U_wind_ms": U_WIND,
         "L_scale_m": L_SCALE,
-        "sink_ref_ms": SINK_REF,
-        "max_surface_lift_ms": round(float(w_surface[ix_max]), 2),
+        "max_surface_lift_ms": round(w_peak, 2),
         "x_of_max_lift_m_from_abbey": round(float(x[ix_max]), 0),
-        "sink_band_ms": list(SINK_BAND),
-        "soarable_layer_depth_m_at_sink1": round(soar_depth, 0),
-        "lift_exceeds_optimistic_sink": bool(w_surface[ix_max] >= SINK_BAND[0]),
+        "slope_formula_lift_ms": round(float(w_slope_formula), 2),
+        "sink_best_wing_ms": round(float(sink["best"]), 2),
+        "sink_nominal_wing_ms": round(float(sink["nominal"]), 2),
+        "wind_for_peak_lift_to_match_best_sink_ms": round(float(U_WIND * sink["best"] / w_peak), 1),
         "note": "coarse 6 m DEM under-resolves the escarpment; LIDAR + LES "
                 "(Phase 2) expected to raise the slope and the lift",
     }

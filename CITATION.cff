@@ -6,7 +6,8 @@ authors:
     given-names: David H.
     orcid: "https://orcid.org/0000-0002-3071-304X"
     affiliation: Remiza
-date-released: 2026-06-15
+version: "1.1.0"
+date-released: 2026-10-16
 license: MIT
 doi: "10.5281/zenodo.20706321"
 repository-code: "https://github.com/silverdavi/eilmer-flight-feasibility"

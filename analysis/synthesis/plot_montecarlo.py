@@ -17,74 +17,65 @@ from plot_utils import PALETTE, panel_label, save_fig, set_style  # noqa: E402
 
 MC = ROOT / "data" / "processed" / "montecarlo.npz"
 METRICS = Path(__file__).resolve().parent / "metrics.json"
+AERO = ROOT / "analysis" / "aero" / "metrics.json"
 
 
 def main() -> None:
     set_style()
     d = np.load(MC)
-    R = d["R"]
     target = float(d["target"])
     m = json.loads(METRICS.read_text())
+    rt = json.loads(AERO.read_text())["stability"]["reaction_time_s"]
 
     fig, (axa, axb) = plt.subplots(1, 2, figsize=(12, 5.0))
 
-    # a -- distribution of achievable ground range
-    disp = np.clip(R, 0, 500)
-    bins = np.linspace(0, 500, 51)
-    axa.hist(disp[disp < target], bins=bins, color=PALETTE["slate"], alpha=0.7)
-    axa.hist(disp[disp >= target], bins=bins, color=PALETTE["moss"], alpha=0.85)
-    axa.axvline(target, color=PALETTE["terracotta"], lw=1.8, ls="--")
-    med = m["median_range_m"]
-    axa.axvline(med, color=PALETTE["ink"], lw=1.2, ls=":")
-    pr = m["p_reach_200m"]
-    axa.text(target + 8, axa.get_ylim()[1] * 0.92,
-             f"{pr[0]*100:.0f}% reach 200 m\n[{pr[1]*100:.0f}, {pr[2]*100:.0f}]",
-             color=PALETTE["moss"], fontsize=9)
-    axa.text(med - 8, axa.get_ylim()[1] * 0.62, f"median {med:.0f} m",
-             color=PALETTE["ink"], fontsize=8, ha="right")
-    axa.text(target + 8, axa.get_ylim()[1] * 0.52, "200 m target", color=PALETTE["terracotta"], fontsize=8)
-    axa.set_xlabel("ground range (m, capped at 500)")
-    axa.set_ylabel("sampled worlds")
-    axa.set_title("A quarter of plausible worlds reach 200 m")
-    axa.set_xlim(0, 500)
+    # a -- distribution of ground range, both tracks
+    bins = np.linspace(0, 400, 41)
+    Rs = np.clip(d["R_along_slope"], 0, 400)
+    Ri = np.clip(d["R_into_wind"], 0, 400)
+    axa.hist(Ri, bins=bins, color=PALETTE["slate"], alpha=0.55, label="into wind")
+    axa.hist(Rs, bins=bins, color=PALETTE["moss"], alpha=0.6, label="along slope")
+    axa.axvline(target, color=PALETTE["terracotta"], lw=1.6, ls=":")
+    top = axa.get_ylim()[1]
+    for key, col, y in (("along_slope", PALETTE["moss"], 0.9), ("into_wind", PALETTE["slate"], 0.74)):
+        p = m["tracks"][key]["p_reach_200m"]
+        n_reach = m["tracks"][key]["n_reach_200m"]
+        label = (f"{p[0]*100:.1f}% reach 200 m\n[{p[1]*100:.1f}, {p[2]*100:.1f}]" if n_reach
+                 else f"none of {m['n_samples']:,}\nreach 200 m")
+        axa.text(target + 8, top * y, label, color=col, fontsize=8.5)
+    axa.set_xlabel("ground range (m, capped at 400)")
+    axa.set_ylabel(f"samples (of {int(d['n']):,})")
+    axa.set_title("Ground range over the sampled designs and days")
+    axa.set_xlim(0, 400)
+    axa.legend(loc="center right", fontsize=8.5)
     panel_label(axa, "a")
 
-    # b -- why the fate flips: the timescale of pitch divergence vs the flight.
-    # Among reached flights, tailless pitch error doubles in a fraction of a
-    # second, while the flight must stay controlled for ~20 s; tailed configs are
-    # stable (never diverge), shown as an off-scale annotation.
-    reached = d["reached"]
-    t2_nt = d["t2_notail"][reached]
-    ft = d["flight_time"][reached]
-    t2_nt = t2_nt[np.isfinite(t2_nt)]
-    bins = np.logspace(-1, 2, 40)
+    # b -- tailless pitch doubling time vs flight duration, flights that reach 200 m
+    reached = d["reached_along_slope"]
+    t2 = d["t2_notail"][reached]
+    t2 = t2[np.isfinite(t2)]
+    ft = d["t_flight_along_slope"][reached]
+    bins = np.logspace(-1.3, 2.2, 45)
     axb.set_xscale("log")
-    axb.hist(t2_nt, bins=bins, color=PALETTE["terracotta"], alpha=0.85,
-             label="no tail: time to lose pitch control")
-    axb.hist(ft, bins=bins, color=PALETTE["moss"], alpha=0.6,
-             label="flight duration (time it must stay controlled)")
-    med_t2 = float(np.median(t2_nt))
-    med_ft = float(np.median(ft))
-    axb.axvline(med_t2, color=PALETTE["terracotta"], lw=1.2, ls="--")
-    axb.axvline(med_ft, color=PALETTE["moss"], lw=1.2, ls="--")
+    axb.axvspan(rt[0], rt[1], color=PALETTE["gold"], alpha=0.25, lw=0)
+    axb.hist(t2, bins=bins, color=PALETTE["terracotta"], alpha=0.85,
+             label="no tail: time to double pitch error")
+    axb.hist(ft, bins=bins, color=PALETTE["moss"], alpha=0.6, label="flight duration")
     ytop = axb.get_ylim()[1]
-    axb.annotate("", xy=(med_ft, ytop * 0.82), xytext=(med_t2, ytop * 0.82),
-                 arrowprops=dict(arrowstyle="<->", color=PALETTE["ink"], lw=1.1))
-    axb.text(np.sqrt(med_t2 * med_ft), ytop * 0.86,
-             f"~{med_ft/med_t2:.0f}x too slow\nto react", ha="center", va="bottom",
-             fontsize=8.5, color=PALETTE["ink"])
-    axb.text(med_t2, ytop * 0.5, f"  median {med_t2:.2f} s\n  (control lost after ~3 m)",
-             color=PALETTE["terracotta"], fontsize=8, va="center")
-    axb.text(med_ft, ytop * 0.32, f"median {med_ft:.0f} s  ", color=PALETTE["moss"],
-             fontsize=8, va="center", ha="right")
-    axb.text(0.5, 0.5, "with a tail: every reaching\nconfiguration is stable\n(never diverges)",
-             transform=axb.transAxes, ha="center", va="center", fontsize=8,
-             color=PALETTE["dustyblue"], fontweight="bold")
+    axb.text(np.sqrt(rt[0] * rt[1]), ytop * 0.95, "human\nreaction\ntime", ha="center",
+             va="top", fontsize=7.5, color=PALETTE["ink"])
+    med_t2 = m["notail_t2_median_reached_s"]
+    med_ft = m["tracks"]["along_slope"]["median_flight_time_reached_s"]
+    axb.axvline(med_t2, color=PALETTE["terracotta"], lw=1.1, ls="--")
+    axb.axvline(med_ft, color=PALETTE["moss"], lw=1.1, ls="--")
+    axb.text(med_t2 * 1.08, ytop * 0.55, f"median {med_t2:.2f} s", color=PALETTE["terracotta"], fontsize=8)
+    axb.text(med_ft * 0.93, ytop * 0.55, f"median {med_ft:.0f} s", color=PALETTE["moss"],
+             fontsize=8, ha="right")
     axb.set_xlabel("time (s, log scale)")
-    axb.set_ylabel("reached flights")
-    axb.set_title("Tailless pitch diverges far faster than the flight lasts")
-    axb.set_xlim(0.1, 100)
-    axb.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=1, fontsize=8)
+    axb.set_ylabel("flights reaching 200 m along the slope")
+    axb.set_title("Pitch doubling time and flight duration")
+    axb.set_xlim(10**-1.3, 10**2.2)
+    axb.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2, fontsize=8)
     panel_label(axb, "b")
 
     fig.tight_layout()

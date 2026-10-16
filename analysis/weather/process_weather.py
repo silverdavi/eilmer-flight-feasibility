@@ -63,6 +63,19 @@ def rose_matrix(df: pd.DataFrame) -> np.ndarray:
     return 100.0 * mat / len(df)
 
 
+def strong_sw(df: pd.DataFrame, thresholds=(5, 6, 7, 8, 9, 10, 11, 12)) -> dict:
+    """Percent of hours with SW-sector wind at or above each speed, 95% CI across years."""
+    sw = (df["wind_dir_deg"] >= SECTOR_LO) & (df["wind_dir_deg"] <= SECTOR_HI)
+    out = {}
+    for u in thresholds:
+        f = sw & (df["wind_speed_ms"] >= u)
+        py = 100 * df.assign(f=f).groupby("year")["f"].mean()
+        mean, lo, hi = ci95_across_years(py)
+        out[str(u)] = {"mean": round(mean, 2), "ci95": [round(lo, 2), round(hi, 2)],
+                       "hours_per_year": round(float(df.assign(f=f).groupby("year")["f"].sum().mean()), 0)}
+    return out
+
+
 def main() -> None:
     df = load()
     fav = favourable(df)
@@ -96,6 +109,7 @@ def main() -> None:
         "sw_sector_any_speed_pct": round(
             100 * ((df["wind_dir_deg"] >= SECTOR_LO) & (df["wind_dir_deg"] <= SECTOR_HI)).mean(), 1),
         "favourable_pct_by_season": season,
+        "sw_pct_at_or_above_ms": strong_sw(df),
     }
     METRICS.write_text(json.dumps(metrics, indent=2))
     print(json.dumps(metrics, indent=2))

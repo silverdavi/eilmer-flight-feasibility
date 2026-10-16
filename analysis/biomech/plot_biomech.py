@@ -38,27 +38,22 @@ def main() -> None:
     axa.axhline(f_lo, color=PALETTE["terracotta"], lw=1, ls="--")
     axa.text(13.2, (f_lo + f_hi) / 2, "tibia fracture\n7.5-11.3 kN", color=PALETTE["terracotta"],
              fontsize=8, va="center", ha="center")
-    # regimes
-    axa.axvspan(1.0, 3.0, color=PALETTE["moss"], alpha=0.10)
-    axa.text(2.0, 20.5, "flared\ntouchdown", color=PALETTE["moss"], fontsize=8, ha="center")
-    axa.axvspan(7.0, 14.0, color=PALETTE["terracotta"], alpha=0.08)
-    axa.text(10.5, 20.5, "departure\nimpact", color=PALETTE["terracotta"], fontsize=8, ha="center")
     axa.set_xlabel("impact vertical speed (m/s)")
-    axa.set_ylabel("peak force per leg (kN)")
-    axa.set_title("Departure-speed impacts overload the tibia")
+    axa.set_ylabel("average force per leg (kN)")
+    axa.set_title("Feet-first impact force per leg")
     axa.set_xlim(0, 15)
     axa.set_ylim(0, 22)
     axa.legend(loc="center left", fontsize=8)
     panel_label(axa, "a")
 
     # b -- impact-speed distributions vs fracture-onset band
-    flare = d["flare_vz"]
+    controlled = d["controlled_vz"]
     depart = d["depart_vz"]
     bins = np.linspace(0, 18, 46)
-    axb.hist(flare, bins=bins, color=PALETTE["moss"], alpha=0.75, density=True,
-             label="flared touchdown")
+    axb.hist(controlled, bins=bins, color=PALETTE["moss"], alpha=0.75, density=True,
+             label="controlled glide, no flare")
     axb.hist(depart, bins=bins, color=PALETTE["terracotta"], alpha=0.7, density=True,
-             label="uncontrolled departure")
+             label="loss of pitch control")
     # fracture-onset band across plausible stopping distance
     vstar_lo = float(np.min(d["v_star_lo"][(d["d_axis"] >= 0.1) & (d["d_axis"] <= 0.35)]))
     vstar_hi = float(np.max(d["v_star_hi"][(d["d_axis"] >= 0.1) & (d["d_axis"] <= 0.35)]))
@@ -68,13 +63,12 @@ def main() -> None:
     axb.text(m["fracture_onset_speed_mid_ms"] - 0.3, ymax * 0.78,
              "fracture onset\n(legs break\nto the right)", color=PALETTE["ink"], fontsize=8,
              ha="right")
-    axb.text(2.4, ymax * 0.6, "legs\nsurvive", color=PALETTE["moss"], fontsize=8, ha="center")
     pb = m["p_legs_break_if_departed"]
-    axb.text(13.5, ymax * 0.45, f"{pb*100:.0f}% of departures\nbreak both legs",
+    axb.text(13.5, ymax * 0.45, f"{pb*100:.0f}% exceed\nfracture onset",
              color=PALETTE["terracotta"], fontsize=8, ha="center")
     axb.set_xlabel("impact vertical speed (m/s)")
     axb.set_ylabel("probability density")
-    axb.set_title("Broken legs imply an uncontrolled arrival")
+    axb.set_title(f"Arrival speeds of the {m['n_reached_samples']:,} flights reaching 200 m")
     axb.set_xlim(0, 18)
     axb.legend(loc="upper right", fontsize=8)
     panel_label(axb, "b")

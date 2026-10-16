@@ -2,14 +2,11 @@
   "model": "linear orographic, w = U dh/dx exp(-k z); Phase-1 stand-in for LES/WAsP",
   "U_wind_ms": 8.0,
   "L_scale_m": 600.0,
-  "sink_ref_ms": 1.0,
   "max_surface_lift_ms": 1.5,
   "x_of_max_lift_m_from_abbey": -15.0,
-  "sink_band_ms": [
-    0.75,
-    2.0
-  ],
-  "soarable_layer_depth_m_at_sink1": 38.0,
-  "lift_exceeds_optimistic_sink": true,
+  "slope_formula_lift_ms": 1.78,
+  "sink_best_wing_ms": 1.9,
+  "sink_nominal_wing_ms": 3.14,
+  "wind_for_peak_lift_to_match_best_sink_ms": 10.1,
   "note": "coarse 6 m DEM under-resolves the escarpment; LIDAR + LES (Phase 2) expected to raise the slope and the lift"
 }

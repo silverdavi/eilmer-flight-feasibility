@@ -1,0 +1,33 @@
+% Shared preamble for main.tex and supplementary.tex.
+% --- page and typography ---
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\linespread{1.05}
+
+% --- math, units, figures, tables ---
+\usepackage{amsmath}
+\usepackage{siunitx}
+\sisetup{detect-all, range-phrase={\text{--}}, range-units=single}
+\usepackage{graphicx}
+\graphicspath{{figures/}{../figures/}}
+\usepackage{booktabs}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{placeins}
+
+% --- references ---
+\usepackage[backend=biber,style=numeric-comp,sorting=none,giveninits=true,maxbibnames=8,doi=true,url=false,isbn=false]{biblatex}
+\addbibresource{references.bib}
+
+% --- links and cross-refs (xr-hyper before hyperref, cleveref last) ---
+\usepackage{xr-hyper}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,nameinlink]{cleveref}
+
+% Scrub PDF document properties so metadata stays anonymous for the EJP
+% double-anonymous build (harmless in the named build).
+\hypersetup{pdfauthor={},pdfsubject={},pdfkeywords={}}
+
+\input{macros}
+\input{numbers}
