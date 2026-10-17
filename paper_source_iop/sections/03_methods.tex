@@ -3,70 +3,61 @@
 
 \subsection{Terrain}
 
-The terrain is a digital elevation model (DEM) of the abbey spur assembled from the
-Amazon Web Services (AWS) Terrain Tiles at zoom level 14, a grid spacing of about
-\SI{6}{\meter}.
-Slope and aspect (the compass direction a slope faces) are computed within
-\SI{\nSlopeRadius}{\meter} of the abbey, and an elevation section is taken along the
-southwest--northeast axis.
-A \SI{6}{\meter} grid smooths the steep edge of the spur, so the computed slopes are lower
-bounds; airborne laser scanning (LIDAR) would resolve it.
+The terrain comes from the Amazon Web Services (AWS) Terrain Tiles, a digital elevation
+model (DEM) with a grid spacing of about \SI{\nDEMres}{\meter}.
+Slope and aspect (the direction a slope faces) are computed within
+\SI{\nSlopeRadius}{\meter} of the abbey, along with a southwest--northeast elevation section.
+The grid smooths the steep edge of the spur, so slopes are lower bounds.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{fig1_site}
   \caption{\textbf{Terrain at Malmesbury Abbey.}
-  \textbf{(a)} Hillshaded DEM (AWS Terrain Tiles, about \SI{6}{\meter} grid); the dashed
-  line is the section in (c).
-  \textbf{(b)} The launch site within \SI{300}{\meter} of the abbey (star), with ground that
-  faces southwest and is steeper than \ang{5} in orange.
-  The green line is the track along the slope, the longest straight run of that ground
-  (\SI{\nLiftAlongSlope}{\meter}); the grey arrow is the first \SI{200}{\meter} of the track
-  into the wind.
-  \textbf{(c)} Elevation along the southwest--northeast section, with the sampled tower
-  heights.
-  The \SI{6}{\meter} grid smooths the edge of the spur, so the slopes are lower bounds.}
+  \textbf{(a)} Hillshaded DEM (AWS Terrain Tiles); the dashed line is the section in (c).
+  \textbf{(b)} Southwest-facing ground steeper than \ang{\nSWFaceSlope} within \SI{\nSitePanel}{\meter} of the
+  abbey (star), in orange.
+  The green line is the track along the slope (\SI{\nLiftAlongSlope}{\meter}); the grey
+  arrow is the first \SI{\nTarget}{\meter} of the track into the wind.
+  \textbf{(c)} Elevation along the section, with the sampled tower heights.}
   \label{fig:site}
 \end{figure}
 
 \subsection{Wind climatology}
 
-Hourly wind at \SI{10}{\meter} height at the abbey for 2004--2023 (\nHours\ hours) is taken
+Hourly \SI{10}{\meter} wind at the abbey for 2004--2023 (\nHours\ hours) comes
 from the ERA5 reanalysis of the European Centre for Medium-Range Weather Forecasts
-\autocite{hersbach2020era5}, through the Open-Meteo archive \autocite{openmeteo_archive}.
-An hour counts as favourable for launch when the wind blows from the southwest sector
-(\ang{191}--\ang{259}, centred on the slope aspect) at \SIrange{5}{12}{\meter\per\second}.
-Fractions are reported for the year and for each season, with \SI{95}{\percent} confidence
-intervals (CI) from the spread across the twenty years.
+\autocite{hersbach2020era5}, through the Open-Meteo archive
+\autocite{openmeteo_archive}.
+An hour is favourable when the wind blows from the southwest sector
+(\ang{\nSectorLo}--\ang{\nSectorHi}, centred on the slope aspect) at \SIrange{\nSpeedLo}{\nSpeedHi}{\meter\per\second}.
+Annual and seasonal fractions have \SI{95}{\percent} confidence intervals (CI) across the
+twenty years.
 Modern data stand in for the eleventh century.
 Reconstructions of the North Atlantic Oscillation (NAO), the pressure pattern that sets the
-strength of the westerlies over Britain, disagree on its phase during the Medieval Climate
-Anomaly, but none indicates a long negative phase with weak westerlies
+strength of the westerlies over Britain, disagree on its medieval phase
 \autocite{trouet2009nao,ortega2015nao}.
+Neither indicates a long negative phase with weak westerlies.
 
 \subsection{Ridge lift}
 
-Wind blowing up a slope is deflected upwards.
-To first order the vertical air velocity follows the surface gradient and decays with
-height,
+Wind blowing up a slope is deflected upwards, with a vertical velocity that to first order
+follows the surface gradient and decays with height,
 \begin{equation}
   w(x,z) = U\,\frac{\mathrm{d}h}{\mathrm{d}x}\,e^{-kz},
   \label{eq:ridge}
 \end{equation}
 where \(U\) is the wind speed, \(h(x)\) the terrain height along the wind, \(z\) the height
 above the surface, and \(k = 2\pi/L\) with \(L\) the horizontal scale of the slope.
-\Cref{eq:ridge} is applied to the measured section (Supplementary \cref{fig:ridge}).
-The glide model uses the simpler surface estimate \(w = \eta\,U\sin\theta_s\), with
-\(\theta_s\) the slope angle and \(\eta \le 1\) an efficiency that allows for flow that
-does not follow the surface.
-The lift acts only over the slope: for \SI{\nLiftIntoWind}{\meter} on the track that
-heads into the wind, where the section flattens onto the valley floor, and for
-\SI{\nLiftAlongSlope}{\meter} on the track that follows the slope, the longest continuous
-stretch of southwest-facing ground steeper than \ang{5} (\cref{fig:site}b).
+Supplementary \cref{fig:ridge} applies \cref{eq:ridge} to the measured section; the glide
+model uses the simpler surface estimate \(w = \eta\,U\sin\theta_s\), where
+\(\theta_s\) is the slope angle and \(\eta \le 1\) allows for flow that does not follow the
+surface.
+This lift extends \SI{\nLiftIntoWind}{\meter} on the track into the wind and
+\SI{\nLiftAlongSlope}{\meter} on the track along the slope (\cref{fig:site}b).
 
 \subsection{Glide performance}
 
-The glide ratio \LD\ of an unknown wing is estimated from the parabolic drag polar
+The glide ratio \LD\ of an unknown wing follows from the parabolic drag polar
 \(C_D = C_{D0} + C_L^2/(\pi e A)\), whose maximum is
 \begin{equation}
   (\LD)_\mathrm{max} = \frac{1}{2}\sqrt{\frac{\pi e A}{C_{D0}}},
@@ -74,45 +65,40 @@ The glide ratio \LD\ of an unknown wing is estimated from the parabolic drag pol
 \end{equation}
 where \(A\) is the aspect ratio (span squared over area), \(e\) the span efficiency, and
 \(C_{D0}\) the zero-lift drag coefficient \autocite{drela2014flight}.
-Each factor can be bounded for a cloth wing carrying a prone man.
-The aspect ratio is taken as \numrange{\nARlo}{\nARhi}, a span of about one to two arm
-spans for areas of \SIrange{5}{10}{\meter\squared}.
+An aspect ratio of \numrange{\nARlo}{\nARhi} gives a span of one to two arm spans for areas
+of \SIrange{\nAreaLo}{\nAreaHi}{\meter\squared}.
 Span efficiencies of \numrange{\nElo}{\nEhi} cover untwisted, non-elliptical wings
 \autocite{drela2014flight}.
-The zero-lift drag \(C_{D0} = \numrange{\nCDzlo}{\nCDzhi}\) combines the profile drag of a
-cambered membrane at a Reynolds number near \num{e6}
-\autocite{lissaman1983lowre,hoerner1985lift} with the drag of the pilot's body, frame,
-and bracing \autocite{hoerner1965drag}.
+The zero-lift drag \(C_{D0} = \numrange{\nCDzlo}{\nCDzhi}\) adds the profile drag of a
+cambered membrane at a Reynolds number near \num{e\nReExp}
+\autocite{lissaman1983lowre,hoerner1985lift} to the drag of the pilot's body, frame and
+bracing \autocite{hoerner1965drag}.
 These ranges give \((\LD)_\mathrm{max} = \numrange{\nLDlo}{\nLDhi}\), with \num{\nLDnom}
 at their centres.
-The glide calculation flies every wing at its best glide ratio, which favours the
-account.
+Every wing is flown at its best glide ratio, which favours the account.
 
-The trim airspeed of a wing of area \(S\) and mass \(m\) at lift coefficient \(C_L\) is
-\(V = \sqrt{2mg/(\rho S C_L)}\), which is \SI{\nTrimSpeed}{\meter\per\second} for the nominal
+A wing of area \(S\) carrying mass \(m\) at lift coefficient \(C_L\) trims at
+\(V = \sqrt{2mg/(\rho S C_L)}\), \SI{\nTrimSpeed}{\meter\per\second} for the nominal
 configuration of \cref{fig:apparatus} (\SI{\nMass}{\kilogram}, \SI{\nArea}{\meter\squared},
 \(C_L = \nCLtrim\)).
-\Cref{fig:apparatus} shows the centre of the sampled ranges and is not a reconstruction;
-the only historical detail it carries is the wing fixed to the hands and feet, with no
-tail.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.75\linewidth]{fig_apparatus}
-  \caption{\textbf{Nominal model configuration.}
-  A cloth wing on a wooden frame with the pilot prone beneath it, the wing fixed to his
-  hands at the leading edge and to his feet at the trailing edge, and no tail.
-  The dimensions are the centres of the sampled ranges (Supplementary \cref{tab:priors}),
-  not a historical reconstruction: no source describes the apparatus beyond its wings.}
+  \caption{\textbf{Nominal model configuration, not a reconstruction.}
+  A tailless cloth wing fixed to the prone pilot's hands (leading edge) and feet (trailing
+  edge).
+  Only the attachment and the missing tail come from the source; the dimensions are the centres of the sampled
+  ranges (Supplementary \cref{tab:priors}).
+  The dashed outline marks where a tail would be; arrows show lift, weight, glide and headwind.}
   \label{fig:apparatus}
 \end{figure}
 
 \subsection{Launch and glide trajectory}
 
-A man stepping off a tower does not start at flying speed.
-He leaves at about \SI{\nJump}{\meter\per\second} relative to the ground and must dive until
-the airspeed reaches \(V\).
-The flight is therefore integrated in time as a point mass held at constant \(C_L\),
+A man stepping off a tower leaves at about \SI{\nJump}{\meter\per\second} relative to the
+ground and dives until the airspeed reaches \(V\), so the flight is integrated as a point mass at constant
+\(C_L\),
 \begin{equation}
   \dot V = g\sin\gamma - \frac{D}{m}, \qquad
   \dot\gamma = \frac{1}{V}\left(g\cos\gamma - \frac{L}{m}\right), \qquad
@@ -122,74 +108,59 @@ The flight is therefore integrated in time as a point mass held at constant \(C_
 where \(V\) is now the airspeed, \(\gamma\) the descent angle below the horizontal,
 \(L = \frac{1}{2}\rho V^2 S C_L\), and \(D = L/(\LD)\).
 The airspeed at release is the jump speed plus the headwind.
-In still air the craft dives, gains speed, and pulls out in a damped oscillation, the
-phugoid.
 
-The wind also changes the ground covered, and two tracks bracket the possibilities.
+Two tracks bracket the ground covered.
 On the first, the pilot heads southwest into the wind, down the slope towards the river
-\autocite{woosnam1986eilmer}; his ground speed is \(V\cos\gamma - U\), and the ground is the
-measured section.
-On the second, he flies northwest along the slope with the wind from the side and crabs,
-heading partly into the wind so that it does not drift him off the track; his ground speed
-is
-\(\sqrt{(V\cos\gamma)^2 - U^2}\), and the ground is taken as a contour
-\SI{\nContour}{\meter} below the abbey, half-way down the slope.
-The second is how hang-glider and sailplane pilots use ridge lift \autocite{faa_glider}.
-William's ``more than a furlong'' is tested as a ground range of at least
-\SI{200}{\meter}.
+\autocite{woosnam1986eilmer}, at ground speed \(V\cos\gamma - U\) over the measured section.
+On the second, he flies northwest along the slope with the wind from the side, as
+hang-glider and sailplane pilots use ridge lift \autocite{faa_glider}.
+He crabs, heading partly into the wind to hold the track, at ground speed
+\(\sqrt{(V\cos\gamma)^2 - U^2}\) over a contour \SI{\nContour}{\meter} below the abbey.
+William's ``more than a furlong'' becomes a ground range of at least \SI{\nTarget}{\meter}.
 
 \subsection{Pitch stability}
 
-A wing holds its pitch attitude on its own if the centre of gravity (CG) lies ahead of the
-neutral point, the point about which the pitching moment does not change with angle of
-attack.
-Both are written as fractions of the mean chord \(c\) from the leading edge, \(\cgfrac\) and
-\(\npfrac\).
+A wing is stable in pitch if the centre of gravity (CG) lies ahead of the
+neutral point, about which the pitching moment does not change with angle of attack.
+Both are measured from the leading edge as fractions of the mean chord \(c\), \(\cgfrac\)
+and \(\npfrac\).
 A cambered wing without a tail has \(\npfrac \approx \nNPnotail\); a tail moves it aft, to
 \num{\nNPtail} for the nominal tail, and adds pitch damping \autocite{drela2014flight}.
 
-The pilot's CG is set by his body.
-With the wing fixed to his hands at the leading edge and his feet at the trailing edge,
-his mass centre lies between them.
-Standing, a man's mass centre is at about \SI{55}{\percent} of his height above the soles
-\autocite{winter2009biomechanics}, and his reach from soles to hands raised overhead is
-about \num{1.25} times his height.
-Laid out from hands to feet, the mass centre therefore sits at about \num{0.55} of that
-distance behind the hands.
+The pilot's mass centre lies between his hands, at the leading edge, and feet, at the
+trailing edge.
+Standing, it is at about \SI{\nComHeightPct}{\percent} of his height above the soles
+\autocite{winter2009biomechanics}, and his reach from soles to raised hands is about
+\num{\nReachRatio} times his height.
+Laid out, it lies about \num{\nCGstraight} of the hand-to-foot distance behind the hands.
 The sampled range \(\cgfrac = \numrange{\nCGlo}{\nCGhi}\) runs from this straight posture
-forward to a pilot who draws his hips up under the leading edge.
-The pitch analysis is also run across \(\cgfrac = \numrange{0.20}{0.60}\), to show where
-the conclusion would change.
+forward to hips drawn up under the leading edge.
+A wider sweep, \(\cgfrac = \numrange{\nCGsweepLo}{\nCGsweepHi}\), shows where the conclusion would change.
 
-The short-period pitch motion is linearised in angle of attack and pitch rate with
-standard stability derivatives \autocite{drela2014flight}.
-When the CG is aft of the neutral point, the state matrix has a positive real eigenvalue
-\(\lambda\), and a disturbance doubles in \(t_2 = \ln 2/\lambda\).
-\(t_2\) is compared with the duration of the flight and with the effective time delay of a
-human operator in a manual control task, about \SIrange{\nReactLo}{\nReactHi}{\second}
+With the CG aft of the neutral point, the short-period motion, linearised in angle of attack
+and pitch rate \autocite{drela2014flight}, has a positive real eigenvalue \(\lambda\), so a
+disturbance doubles in \(t_2 = \ln 2/\lambda\).
+\(t_2\) is compared with the flight time and a human operator's effective
+time delay in manual control, about \SIrange{\nReactLo}{\nReactHi}{\second}
 \autocite{mcruer1967pilot}.
-The nonlinear response to an \ang{8} gust is also integrated, with control taken as lost
-beyond a pitch attitude of \ang{60}.
+A nonlinear run tests an \ang{\nGust} gust, with control lost beyond \ang{\nPitchLoss} of pitch.
 
 \subsection{Monte Carlo sample}
 
-The apparatus and the day are unknown, so \nSamples\ cases are drawn from uniform ranges
-(Supplementary \cref{tab:priors}) with a fixed random seed.
-The draws are wing area, mass, trim \(C_L\), aspect ratio, span efficiency, zero-lift drag,
-tower height, slope angle, lift efficiency \(\eta\), CG, and the neutral-point shift from a
-tail.
-The glide ratio follows from \cref{eq:polar} and is not drawn directly.
-The launch wind is drawn from the measured ERA5 southwest-sector hours at
-\SIrange{3}{16}{\meter\per\second}, on the assumption that Eilmer chose a windy day.
+Because the apparatus and the day are unknown, \nSamples\ cases are drawn with a fixed
+seed from the uniform ranges of every parameter above (Supplementary
+\cref{tab:priors}), except the glide ratio, which follows from \cref{eq:polar}.
+The launch wind is drawn from the ERA5 southwest-sector hours at
+\SIrange{\nWindLo}{\nWindHi}{\meter\per\second}, assuming Eilmer chose a windy day.
 Each case is flown on both tracks with \cref{eq:eom} and scored on whether it covers
-\SI{200}{\meter}, and whether \(t_2\) is shorter than the flight, with and without a tail.
-Fractions carry Wilson score \SI{95}{\percent} confidence intervals.
+\SI{\nTarget}{\meter} and whether \(t_2\) is shorter than the flight, with and without a tail.
+Fractions have Wilson score \SI{95}{\percent} CIs.
 
 \subsection{Impact}
 
 William records that Eilmer broke both legs and survived.
 In a feet-first landing the body stops over a distance \(d\) of leg flexion and ground
-give, so the mean force for a vertical arrival speed \(v\) is
+give, so a vertical arrival speed \(v\) gives a mean force
 \begin{equation}
   F = \frac{m v^2}{2 d}, \qquad \text{shared between two legs.}
   \label{eq:impact}
@@ -197,11 +168,11 @@ give, so the mean force for a vertical arrival speed \(v\) is
 The tibia breaks under axial and combined loads of \SIrange{\nTibiaLo}{\nTibiaHi}{\kilo\newton}
 per leg \autocite{salzar2014leg,abidin2026tibia,forman2012femur,ivarsson2005bending,femurFE2022},
 which sets a fracture-onset speed \(v^\star = \sqrt{2 d F_\mathrm{tot}/m}\) for
-\(d = \SIrange{10}{35}{\centi\meter}\).
-Two arrivals are compared for the cases that reach \SI{200}{\meter}.
-In a controlled glide that ends without a flare, the vertical speed is the one at which
-\cref{eq:eom} meets the ground.
+\(d = \SIrange{\nStopLo}{\nStopHi}{\centi\meter}\).
+Two arrivals are compared for cases that reach \SI{\nTarget}{\meter}.
+A controlled glide without a flare meets the ground at the vertical speed from
+\cref{eq:eom}.
 After a loss of pitch control the craft strikes at airspeed \(V\) along a path
 \ang{\nDepAngLo}--\ang{\nDepAngHi} below horizontal, with vertical speed \(V\sin\theta\).
-\Cref{eq:impact} uses the mean force, so real peak loads are higher and the onset speeds are
+Because \cref{eq:impact} uses the mean force, peak loads are higher and the onset speeds are
 upper bounds.

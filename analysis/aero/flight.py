@@ -47,6 +47,7 @@ DT = 0.01                # integration step (s)
 T_MAX = 120.0            # still airborne after this: hovering in lift
 SOARING_RANGE = 1000.0   # display cap on range (m)
 INTO_WIND_AZ = 225.0     # SW heading, down the escarpment into the wind
+SW_FACE_MIN_SLOPE_DEG = 5.0   # ground at least this steep counts as lift-producing slope
 TRACKS = ("into_wind", "along_slope")
 
 
@@ -90,7 +91,7 @@ def into_wind_lift_extent(profile, flat_deg: float = 2.0) -> float:
     return float(s[flat[0]]) if flat.size else float(s[-1])
 
 
-def along_slope_lift_extent(min_slope_deg: float = 5.0, offsets=range(0, 41, 10),
+def along_slope_lift_extent(min_slope_deg: float = SW_FACE_MIN_SLOPE_DEG, offsets=range(0, 41, 10),
                             endpoints: bool = False):
     """Longest straight NW-SE run of SW-facing slope near the abbey (m).
 

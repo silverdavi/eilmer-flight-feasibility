@@ -1,10 +1,10 @@
 \section{Using the study in teaching}
 \label{sec:teaching}
 
-The analysis divides into exercises that each use one topic from a first or second year
-mechanics course and one public data set or short script.
-They can be set singly, as problems, or together as a project in which students rebuild a
-figure and then change one assumption.
+Each exercise uses one topic from first- or second-year mechanics and one public data set
+or short script.
+They can be set singly, or together as a project in which students rebuild a figure and
+change one assumption.
 Worked answers are in Supplementary S4.
 
 \begin{enumerate}
@@ -13,8 +13,8 @@ Worked answers are in Supplementary S4.
   \(V = \SI{\nTrimSpeed}{\meter\per\second}\) to fly.
   Ignoring drag, find the height lost in reaching \(V\).
   How large a headwind makes the launch dive unnecessary?
-  Integrate \cref{eq:eom} numerically in still air and compare the range with the steady
-  glide estimate \(H\,(\LD)\).
+  Integrate \cref{eq:eom} in still air and compare the range with the steady glide estimate
+  \(H\,(\LD)\).
 
   \item \textbf{Glide ratio from a drag polar.}
   Derive \cref{eq:polar} by minimising \(C_D/C_L\).
@@ -32,14 +32,14 @@ Worked answers are in Supplementary S4.
   The upward air speed over a slope of angle \(\theta_s\) is about \(U\sin\theta_s\).
   The still-air sink rate is \(V/\sqrt{1+(\LD)^2}\).
   Find the wind at which the two are equal for \LD~\num{\nLDnom} and \LD~\num{\nLDhi} on a
-  slope of \ang{\nSlopePninety}, and compare the answers with the ERA5 wind distribution.
+  slope of \ang{\nSlopePninety}, and compare them with the ERA5 wind distribution.
 
   \item \textbf{Static and dynamic pitch stability.}
   Write the two-state short-period model in angle of attack and pitch rate.
   Show that a positive real eigenvalue appears when the CG moves aft of a point that depends
   on the pitch damping, and compute the doubling time for the nominal craft at
-  \(\cgfrac = 0.45\).
-  Compare it with your own reaction time, measured with a ruler-drop test.
+  \(\cgfrac = \nCGrep\).
+  Compare it with your reaction time from a ruler-drop test.
 
   \item \textbf{Monte Carlo estimation.}
   Rerun the Monte Carlo with a different seed and sample size.
@@ -48,11 +48,11 @@ Worked answers are in Supplementary S4.
 
   \item \textbf{Impact.}
   From \cref{eq:impact}, find the vertical speed that breaks a tibia for stopping distances of
-  \SIrange{10}{35}{\centi\meter}.
-  Estimate the vertical speed of a craft flying at \(V\) along a path \ang{50} below horizontal,
+  \SIrange{\nStopLo}{\nStopHi}{\centi\meter}.
+  Estimate the vertical speed of a craft flying at \(V\) along a path \ang{\nExDiveAngle} below horizontal,
   and of one that glides into the ground at its sink rate.
   What does each tell you about how Eilmer landed?
 \end{enumerate}
 
-Exercises 2 and 6 ask students to work with quantities nobody measured: to bound them from
-physical arguments, sample them, and find which conclusions change when a bound moves.
+In exercises 2 and 6 students bound quantities nobody measured from physical arguments,
+sample them, and find which conclusions change when a bound moves.

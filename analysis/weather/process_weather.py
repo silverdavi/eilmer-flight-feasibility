@@ -25,6 +25,7 @@ METRICS = Path(__file__).resolve().parent / "metrics.json"
 
 SECTOR_LO, SECTOR_HI = 191.25, 258.75   # SSW-WSW, climbs the SW escarpment
 SPEED_LO, SPEED_HI = 5.0, 12.0          # usable ridge-soaring band (m/s)
+STRONG_SW_MS = 8                         # "strong" SW wind threshold quoted in the text (m/s)
 
 N_SECTORS = 16
 SPEED_BINS = [0, 2, 4, 6, 8, 10, 1e9]
@@ -110,6 +111,7 @@ def main() -> None:
             100 * ((df["wind_dir_deg"] >= SECTOR_LO) & (df["wind_dir_deg"] <= SECTOR_HI)).mean(), 1),
         "favourable_pct_by_season": season,
         "sw_pct_at_or_above_ms": strong_sw(df),
+        "strong_sw_threshold_ms": STRONG_SW_MS,
     }
     METRICS.write_text(json.dumps(metrics, indent=2))
     print(json.dumps(metrics, indent=2))

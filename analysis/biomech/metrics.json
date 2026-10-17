@@ -5,7 +5,13 @@
     7.5,
     11.3
   ],
+  "tibia_axial_salzar_kN": 10.3,
+  "stop_distances_m": [
+    0.1,
+    0.35
+  ],
   "stop_distance_mid_m": 0.2,
+  "exercise_dive_angle_deg": 50.0,
   "fracture_onset_speed_mid_ms": 9.7,
   "fracture_onset_speed_range_ms": [
     6.1,

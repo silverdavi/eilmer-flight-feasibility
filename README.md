@@ -15,6 +15,15 @@ elementary flight physics, and sets each step as a student exercise.
 *Malmesbury Abbey from the water meadows southwest of the abbey. Photograph: Dr
 Duncan Pepper, 2012, via Geograph and Wikimedia Commons, CC BY-SA 2.0.*
 
+## Version 1.1.1: revised manuscript and re-rendered Figure 3
+
+The text is shortened for the journal revision; the model and its results are those of
+1.1.0. Every model number in the text is now a macro generated from the `metrics.json`
+files by `analysis/export_numbers.py`, so no number is typed by hand. Figure 3 (the
+nominal apparatus) is re-rendered with Blender Cycles from the model geometry, and its wing
+now has the labelled 7 m² planform area (the earlier mesh had about 6.4 m²). The render
+pipeline is in `viz/hero/` (see [Figure 3 render](#figure-3-render)).
+
 ## Version 1.1.0: corrected glide model
 
 Version 1.0.0 contained an error in the glide model: the ground range used the
@@ -63,6 +72,8 @@ data/raw/          wind data, the abbey photograph (photos/SOURCE.md), data note
 data/processed/    derived datasets (.npz) behind each figure
 figures/           generated figures (PDF and PNG)
 paper_source_iop/  LaTeX manuscript: main.tex, supplementary.tex, sections/, main.pdf
+viz/hero/          Blender render of Figure 3 (final/) and the cover images (scene/);
+  assets/            monk.py (the pilot), monk_prone.blend, fetch_assets.sh, LICENSES.md
 run_all.sh         rebuild every dataset, figure, and number, then compile the paper
 ```
 
@@ -85,15 +96,39 @@ pip install -r requirements.txt
 
 `run_all.sh` fetches the input data, regenerates every `.npz`, figure, and
 `numbers.tex`, and compiles the manuscript if `latexmk` and a TeX distribution are
-present. The fetch steps need network access on the first run. The nominal-apparatus
-render (`figures/fig_apparatus.png`) is a static asset; its 3D rendering pipeline is
-not part of this repository.
+present. The fetch steps need network access on the first run. Figure 3
+(`figures/fig_apparatus.png`) is committed and is re-rendered only with `RENDER_FIG3=1`.
+
+### Figure 3 render
+
+The render needs Blender's Python module (`bpy` 5.0.1, Python 3.11) in its own venv, the
+CC0 assets downloaded by `fetch_assets.sh` (about 300 MB; not redistributed here, see
+`viz/hero/assets/LICENSES.md`), GNU `timeout` and the cairo library for the labels:
+
+```bash
+uv venv --python 3.11 .venv-bpy && uv pip install --python .venv-bpy/bin/python bpy==5.0.1
+uv pip install -r viz/hero/requirements-render.txt      # drawsvg, cairosvg (main .venv)
+brew install coreutils cairo
+viz/hero/assets/fetch_assets.sh
+RENDER_FIG3=1 ./run_all.sh
+```
+
+`render_fig3_v5.py` renders the main view (1024 samples) and the inset (768 samples) with
+Cycles, then `compose_fig3_v6.py` draws the labels from `analysis/aero/metrics.json`. On an
+Apple M4 Max (40-core GPU, Metal) the main view takes about 2 minutes and the inset about
+25 s; `run_all.sh` caps them at 15 and 10 minutes. A re-render in a clean clone matched the
+committed figure to within 3/255 per pixel. For a quick check add `--pct 25 --samples 64`. The pilot is the cached
+`monk_prone.blend`; rebuilding it with `viz/hero/assets/monk.py` (MakeHuman via MPFB2,
+`fetch_assets.sh --monk`) runs a cloth simulation. `viz/hero/final/measure_area.py`
+prints the planform area of the old and new wing meshes. The cover images
+(`viz/hero/scene/render_scene.py`) need `fetch_assets.sh --covers` (sky HDRIs, about 1 GB).
 
 ## Data sources
 
 - **Wind:** ECMWF ERA5 reanalysis via the [Open-Meteo Historical Weather API](https://open-meteo.com/en/docs/historical-weather-api).
 - **Terrain:** [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (about 6 m grid).
 - **Photograph:** Wikimedia Commons, CC BY-SA 2.0 (see `data/raw/photos/SOURCE.md`).
+- **Render assets:** MakeHuman and Poly Haven, CC0 1.0 (see `viz/hero/assets/LICENSES.md`).
 
 See `data/raw/DATA_SOURCES_AND_METHODOLOGY.md`. Site: Malmesbury Abbey, 51.5846° N,
 2.0997° W.

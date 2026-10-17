@@ -1,6 +1,62 @@
 {
   "n_samples": 40000,
   "seed": 42,
+  "target_m": 200.0,
+  "wilson_z": 1.96,
+  "priors": {
+    "wind_ms": [
+      3.0,
+      16.0
+    ],
+    "sector_deg": [
+      191.25,
+      258.75
+    ],
+    "wing_area_m2": [
+      5.0,
+      10.0
+    ],
+    "mass_kg": [
+      70.0,
+      90.0
+    ],
+    "cl": [
+      0.7,
+      1.1
+    ],
+    "aspect_ratio": [
+      3.0,
+      5.0
+    ],
+    "oswald_e": [
+      0.6,
+      0.8
+    ],
+    "cd0": [
+      0.05,
+      0.15
+    ],
+    "tower_m": [
+      15.0,
+      25.0
+    ],
+    "slope_deg": [
+      8.0,
+      18.0
+    ],
+    "ridge_eff": [
+      0.5,
+      1.0
+    ],
+    "cg": [
+      0.35,
+      0.55
+    ],
+    "tail_np_shift": [
+      0.18,
+      0.32
+    ]
+  },
   "wind_source": "ERA5 SW-sector launchable speeds (Workstream B)",
   "flight_model": "standing launch, point mass at fixed trim CL (analysis/aero/flight.py)",
   "tracks": {

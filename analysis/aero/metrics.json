@@ -6,7 +6,14 @@
     "cl_trim": 0.8,
     "jump_speed_ms": 2.0,
     "glide_speed_ms": 15.1,
-    "escarpment_slope_deg_p90": 12.83
+    "escarpment_slope_deg_p90": 12.83,
+    "tower_band_m": [
+      15.0,
+      25.0
+    ],
+    "target_range_m": 200.0,
+    "wind_max_ms": 14.0,
+    "reynolds_nominal": 1330000.0
   },
   "drag_polar": {
     "aspect_ratio": [
@@ -31,6 +38,7 @@
     "lift_extent_into_wind_m": 40.0,
     "lift_extent_along_slope_m": 192.0,
     "along_slope_contour_m": -5.1,
+    "sw_face_min_slope_deg": 5.0,
     "valley_drop_sw_m": 9.2
   },
   "glide": {
@@ -58,7 +66,8 @@
       "high": 104.0
     },
     "min_wind_best_tower15_ms": 6.6,
-    "min_wind_best_tower25_ms": 3.8
+    "min_wind_best_tower25_ms": 3.8,
+    "soaring_onset_wind_best_ms": 5.5
   },
   "stability": {
     "np_notail": 0.25,
@@ -68,6 +77,15 @@
       0.55
     ],
     "representative_cg": 0.45,
+    "cg_sweep": [
+      0.2,
+      0.6
+    ],
+    "cg_straight_posture": 0.55,
+    "com_height_frac": 0.55,
+    "reach_height_ratio": 1.25,
+    "gust_deg": 8.0,
+    "ruler_drop_reaction_s": 0.2,
     "flight_time_s": 15.8,
     "control_loss_deg": 60.0,
     "notail_time_to_control_loss_s": 0.74,

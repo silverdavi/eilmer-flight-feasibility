@@ -35,9 +35,12 @@ SEED = 7
 MASS = 80.0                       # all-up mass (kg)
 G_ACCEL = 9.81
 F_LEG_FRACTURE = (7.5e3, 11.3e3)  # tibia axial fracture, per leg (N); preresearch
-STOP_DISTANCES = [0.10, 0.20, 0.35]   # leg flexion + ground give (m)
+F_TIBIA_AXIAL_SALZAR = 10.3e3     # recommended tibia-only axial threshold (N); Salzar 2014
+STOP_DISTANCE_MID = 0.20          # central stopping distance (m)
+STOP_DISTANCES = [0.10, STOP_DISTANCE_MID, 0.35]   # leg flexion + ground give (m)
 DEPART_ANGLE = (35.0, 70.0)      # impact flight-path angle after loss of control (deg)
 FATAL_DECEL_G = 100.0            # whole-body feet-first survivability ceiling (g)
+EXERCISE_DIVE_ANGLE = 50.0       # worked path angle for teaching Exercise 7 (deg), within DEPART_ANGLE
 
 
 def leg_force(v, d, mass=MASS):
@@ -69,7 +72,7 @@ def main() -> None:
     depart_angle = np.radians(rng.uniform(*DEPART_ANGLE, size=V.shape[0]))
     depart_vz = V * np.sin(depart_angle)
 
-    d_mid = 0.20
+    d_mid = STOP_DISTANCE_MID
     v_star_mid = float(fracture_onset_speed(d_mid, np.mean([f_total_lo, f_total_hi])))
     v_star_min = float(fracture_onset_speed(STOP_DISTANCES[0], f_total_lo))
     p_break_depart = float((depart_vz >= v_star_mid).mean())
@@ -91,7 +94,10 @@ def main() -> None:
         "mass_kg": MASS,
         "n_reached_samples": int(reached.sum()),
         "leg_fracture_per_leg_kN": [f_lo / 1e3, f_hi / 1e3],
+        "tibia_axial_salzar_kN": F_TIBIA_AXIAL_SALZAR / 1e3,
+        "stop_distances_m": [STOP_DISTANCES[0], STOP_DISTANCES[-1]],
         "stop_distance_mid_m": d_mid,
+        "exercise_dive_angle_deg": EXERCISE_DIVE_ANGLE,
         "fracture_onset_speed_mid_ms": round(v_star_mid, 1),
         "fracture_onset_speed_range_ms": [
             round(v_star_min, 1),

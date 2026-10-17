@@ -25,7 +25,7 @@ from pathlib import Path
 
 import numpy as np
 
-from flight import G_ACCEL, RHO, TRACKS, V_JUMP, Site, fly
+from flight import G_ACCEL, RHO, SW_FACE_MIN_SLOPE_DEG, TRACKS, V_JUMP, Site, fly
 
 ROOT = Path(__file__).resolve().parents[2]
 TERRAIN_METRICS = ROOT / "analysis" / "terrain" / "metrics.json"
@@ -38,9 +38,12 @@ METRICS = Path(__file__).resolve().parent / "metrics.json"
 MASS = 80.0              # pilot + apparatus (kg)
 WING_AREA = 7.0          # nominal (m^2); sweep 5-10 in Workstream F
 CL_TRIM = 0.8            # glide trim lift coefficient
-LAUNCH_H = 18.0          # tower height (m); White 1961, band 15-25
+LAUNCH_H = 18.0          # tower height (m); White 1961
+TOWER_BAND = (15.0, 25.0)  # tower-height sensitivity band (m)
 TARGET_RANGE = 200.0     # "more than a furlong" (m)
 EXAMPLE_WINDS = [5.0, 8.0, 11.0]   # trajectories shown in the glide figure
+WIND_MAX = 14.0          # top of the launch-wind sweep (m/s)
+NU_AIR = 1.5e-5          # kinematic viscosity of air near 15 C (m^2/s)
 
 # --- drag polar for the glide-ratio band ---
 AR_BAND = (3.0, 5.0)             # span^2/area of a hand-and-foot wing
@@ -54,10 +57,17 @@ TAIL_NP_SHIFT = 0.28             # (a_t/a_w) V_H (1 - de/da) -> NP to 0.53 c
 CMQ_NOTAIL, CMQ_TAIL = -1.5, -10.0
 IYY = 30.0                       # pitch inertia (kg m^2), m k^2, k ~ 0.6 m
 IYY_BAND = (0.5, 2.0)            # sensitivity multiplier on inertia
-CG_PLAUSIBLE = (0.35, 0.55)      # hanging-pilot CG range (fraction chord)
-GUST_ALPHA0 = np.deg2rad(8.0)    # initial AoA perturbation from a gust
+COM_HEIGHT_FRAC = 0.55          # standing mass centre / stature, above the soles; Winter 2009
+REACH_HEIGHT_RATIO = 1.25        # soles-to-raised-hands reach / stature
+CG_STRAIGHT = 0.55               # laid-out mass centre behind the hands, fraction of hand-to-foot,
+                                 # about (REACH_HEIGHT_RATIO - COM_HEIGHT_FRAC) / REACH_HEIGHT_RATIO
+CG_PLAUSIBLE = (0.35, CG_STRAIGHT)  # hanging-pilot CG range (fraction chord)
+CG_SWEEP = (0.20, 0.60)          # wider CG sweep for the doubling-time curve
+GUST_DEG = 8.0                   # initial AoA perturbation from a gust (deg)
+GUST_ALPHA0 = np.deg2rad(GUST_DEG)
 CONTROL_LOSS_DEG = 60.0          # pitch attitude beyond which recovery is hopeless
 REACTION_TIME = (0.15, 0.3)      # human corrective delay (s); McRuer & Jex 1967
+RULER_DROP_TIME = 0.2            # typical simple reaction time from a ruler-drop test (s)
 
 
 def glide_speed(area=WING_AREA, cl=CL_TRIM):
@@ -138,7 +148,7 @@ def main() -> None:
     best = ld_lines[-1]
 
     # --- glide feasibility: standing launch on both tracks ---
-    winds = np.linspace(0.0, 14.0, 141)
+    winds = np.linspace(0.0, WIND_MAX, 141)
     ranges, tflight = {}, {}
     for track in TRACKS:
         for ld in ld_lines:
@@ -146,9 +156,9 @@ def main() -> None:
                           MASS, WING_AREA, CL_TRIM, ld, site=site)
             ranges[(track, ld)] = R
             tflight[(track, ld)] = t
-    tower_lo = fly("along_slope", 15.0, winds, ridge_updraft(winds, slope),
+    tower_lo = fly("along_slope", TOWER_BAND[0], winds, ridge_updraft(winds, slope),
                    MASS, WING_AREA, CL_TRIM, best, site=site)[0]
-    tower_hi = fly("along_slope", 25.0, winds, ridge_updraft(winds, slope),
+    tower_hi = fly("along_slope", TOWER_BAND[1], winds, ridge_updraft(winds, slope),
                    MASS, WING_AREA, CL_TRIM, best, site=site)[0]
 
     # example trajectories (along-slope, best wing) and still air, to show the dive
@@ -185,6 +195,10 @@ def main() -> None:
                 for tr in TRACKS for ld in ld_lines}
     max_range_into = float(max(np.max(ranges[("into_wind", ld)]) for ld in ld_lines))
     i8 = int(np.argmin(abs(winds - 8.0)))
+    # wind at which the best wing's along-slope range jumps: ridge lift first matches its sink
+    soar_onset = float(winds[int(np.argmax(np.diff(ranges[("along_slope", best)]))) + 1])
+    chord = WING_AREA / np.sqrt(ASPECT_RATIO * WING_AREA)
+    reynolds = V * chord / NU_AIR
 
     # --- tail verdict ---
     flight_time = float(tflight[("along_slope", best)][int(np.argmax(
@@ -195,7 +209,7 @@ def main() -> None:
     over = np.where(np.abs(th_nt) >= CONTROL_LOSS_DEG)[0]
     t_loss = float(t[over[0]]) if over.size else None
 
-    cg = np.linspace(0.20, 0.60, 120)
+    cg = np.linspace(*CG_SWEEP, 120)
 
     def td_curve(x_np_, cmq_, iyy_):
         return np.array([time_to_double(growth_rate(x, x_np_, cmq_, iyy_, V)) for x in cg])
@@ -218,7 +232,9 @@ def main() -> None:
         "inputs": {
             "mass_kg": MASS, "wing_area_m2": WING_AREA, "launch_h_m": LAUNCH_H,
             "cl_trim": CL_TRIM, "jump_speed_ms": V_JUMP,
-            "glide_speed_ms": round(V, 1), "escarpment_slope_deg_p90": slope},
+            "glide_speed_ms": round(V, 1), "escarpment_slope_deg_p90": slope,
+            "tower_band_m": list(TOWER_BAND), "target_range_m": TARGET_RANGE,
+            "wind_max_ms": WIND_MAX, "reynolds_nominal": round(float(reynolds), -4)},
         "drag_polar": {
             "aspect_ratio": list(AR_BAND), "oswald_e": list(OSWALD_BAND),
             "cd0": list(CD0_BAND),
@@ -228,6 +244,7 @@ def main() -> None:
             "lift_extent_into_wind_m": site.lift_extent["into_wind"],
             "lift_extent_along_slope_m": site.lift_extent["along_slope"],
             "along_slope_contour_m": site.contour,
+            "sw_face_min_slope_deg": SW_FACE_MIN_SLOPE_DEG,
             "valley_drop_sw_m": round(float(-np.min(site.profile[1][site.profile[0] <= 300])), 1)},
         "glide": {
             "ld_needed_still_air_steady": round(TARGET_RANGE / LAUNCH_H, 1),
@@ -242,10 +259,14 @@ def main() -> None:
             "range_at_8ms_into_wind_m": {
                 tag(ld): round(float(ranges[("into_wind", ld)][i8]), 0) for ld in ld_lines},
             "min_wind_best_tower15_ms": round(min_wind_for_target(winds, tower_lo), 1),
-            "min_wind_best_tower25_ms": round(min_wind_for_target(winds, tower_hi), 1)},
+            "min_wind_best_tower25_ms": round(min_wind_for_target(winds, tower_hi), 1),
+            "soaring_onset_wind_best_ms": round(soar_onset, 1)},
         "stability": {
             "np_notail": np_nt, "np_tail": np_t,
             "cg_plausible": list(CG_PLAUSIBLE), "representative_cg": round(x_rep, 2),
+            "cg_sweep": list(CG_SWEEP), "cg_straight_posture": CG_STRAIGHT,
+            "com_height_frac": COM_HEIGHT_FRAC, "reach_height_ratio": REACH_HEIGHT_RATIO,
+            "gust_deg": GUST_DEG, "ruler_drop_reaction_s": RULER_DROP_TIME,
             "flight_time_s": round(flight_time, 1),
             "control_loss_deg": CONTROL_LOSS_DEG,
             "notail_time_to_control_loss_s": round(t_loss, 2) if t_loss else None,

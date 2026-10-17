@@ -3,7 +3,7 @@
   "upload_type": "software",
   "access_right": "open",
   "license": "MIT",
-  "description": "Analysis code and LaTeX manuscript for a feasibility study of the eleventh-century flight of Eilmer of Malmesbury. The pipeline reconstructs the launch terrain, builds a wind climatology from ERA5 reanalysis, estimates ridge lift, integrates a standing-launch glide on two flight tracks, analyses pitch stability, runs a Monte Carlo over the unknown apparatus and launch day, and models the impact on the legs. Version 1.1.0 corrects the glide model of 1.0.0, which omitted the headwind from the ground speed and assumed the craft started at gliding speed; its results supersede those of 1.0.0.",
+  "description": "Analysis code, LaTeX manuscript and figure render pipeline for a feasibility study of the eleventh-century flight of Eilmer of Malmesbury. The pipeline reconstructs the launch terrain, builds a wind climatology from ERA5 reanalysis, estimates ridge lift, integrates a standing-launch glide on two flight tracks, analyses pitch stability, runs a Monte Carlo over the unknown apparatus and launch day, and models the impact on the legs. Version 1.1.1 accompanies the revised manuscript: the text is shortened, every model number in the text is generated from the analysis outputs, and Figure 3 is re-rendered with Blender Cycles from the model geometry with the labelled 7 m2 wing area. Version 1.1.0 corrected the glide model of 1.0.0, which omitted the headwind from the ground speed and assumed the craft started at gliding speed; its results supersede those of 1.0.0.",
   "creators": [
     {
       "name": "Silver, David H.",
@@ -20,5 +20,5 @@
     "Monte Carlo",
     "physics education"
   ],
-  "version": "1.1.0"
+  "version": "1.1.1"
 }

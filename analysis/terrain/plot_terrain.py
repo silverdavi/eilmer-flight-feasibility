@@ -17,9 +17,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "config"))
 sys.path.insert(0, str(ROOT / "analysis" / "aero"))
 from plot_utils import PALETTE, panel_label, save_fig, set_style  # noqa: E402
-from flight import INTO_WIND_AZ, along_slope_lift_extent  # noqa: E402
-
-ZOOM_M = 300.0  # half-width of the launch-site panel (m)
+from flight import INTO_WIND_AZ, SW_FACE_MIN_SLOPE_DEG, along_slope_lift_extent  # noqa: E402
+from process_terrain import SITE_PANEL_HALFWIDTH_M as ZOOM_M  # noqa: E402
 
 DEM = ROOT / "data" / "processed" / "malmesbury_dem.npz"
 SECTION = ROOT / "data" / "processed" / "terrain_section.npz"
@@ -71,7 +70,7 @@ def main() -> None:
     dzdn, dzde = -gy, gx
     slope = np.degrees(np.arctan(np.hypot(dzdn, dzde)))
     aspect = (np.degrees(np.arctan2(-dzde, -dzdn)) + 360) % 360
-    sw_face = (slope >= 5) & (aspect >= 191.25) & (aspect <= 258.75)
+    sw_face = (slope >= SW_FACE_MIN_SLOPE_DEG) & (aspect >= 191.25) & (aspect <= 258.75)
     zext = [e_m[cols[0]], e_m[cols[-1]], n_m[rows[-1]], n_m[rows[0]]]
     axz.imshow(ls.hillshade(sub, vert_exag=3, dx=mx, dy=my), cmap="gray", extent=zext,
                origin="upper", alpha=0.55)

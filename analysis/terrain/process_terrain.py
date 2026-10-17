@@ -24,6 +24,7 @@ COMPASS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 SLOPE_RADIUS_M = 400.0   # neighbourhood for the escarpment slope distribution
 SECTION_HALFLEN_M = 1200.0
 SECTION_AZIMUTH_DEG = 45.0  # NE; negative arclength runs SW
+SITE_PANEL_HALFWIDTH_M = 300.0  # half-width of the launch-site panel in Figure 1b
 
 
 def latlon_to_px(lat, lon, d):
@@ -83,6 +84,7 @@ def main() -> None:
         "section_valley_min_m": round(float(prof.min()), 1),
         "relief_abbey_above_valley_m": round(abbey_elev - float(prof.min()), 1),
         "slope_radius_m": SLOPE_RADIUS_M,
+        "site_panel_halfwidth_m": SITE_PANEL_HALFWIDTH_M,
         "slope_mean_deg": round(float(slope_near.mean()), 2),
         "slope_p90_deg": round(float(np.percentile(slope_near, 90)), 2),
         "slope_max_deg": round(float(slope_near.max()), 2),

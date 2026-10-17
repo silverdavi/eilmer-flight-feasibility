@@ -26,32 +26,27 @@ a computational feasibility study of Eilmer of Malmesbury's flight}
 
 \begin{abstract}
 \noindent
-William of Malmesbury records that in the early eleventh century a monk of his abbey,
-Eilmer, fixed wings to his hands and feet, launched from a tower, travelled ``more than a
-furlong'' (about \SI{200}{\meter}), fell, broke both legs, and later blamed the fall on
-having no tail.
-This paper tests whether that account is consistent with elementary flight physics, using
-public data and methods at the level of an undergraduate mechanics course: a digital
-elevation model of the site, twenty years of reanalysis wind data, a slope-lift estimate, a
-point-mass glide integrated from a standing launch, a linear pitch-stability analysis, a
-Monte Carlo sample over the unknown apparatus and launch day, and an impact model for the
-legs.
-A glider leaving the tower at walking pace must lose about \SI{\nHeightToTrim}{\meter} of
-height to reach its \SI{\nTrimSpeed}{\meter\per\second} flying speed, so a long flight needs
-a strong wind.
-Flown out over the valley into that wind, none of \nSamples\ sampled cases covers
-\SI{200}{\meter}.
-Flown along the southwest-facing slope in ridge lift, \SI{\nReachSlope}{\percent} do
-(\SI{95}{\percent} confidence interval \numrange{\nReachSlopeLo}{\nReachSlopeHi}\,\%), with a
+William of Malmesbury records that early in the eleventh century Eilmer, a fellow monk,
+fixed wings to his hands and feet, launched from a tower, travelled ``more than a furlong''
+(about \SI{\nTarget}{\meter}), and fell, breaking both legs.
+He blamed the missing tail.
+This paper tests the account with undergraduate mechanics (glide, slope lift, pitch
+stability, impact), public terrain and wind data, and a Monte Carlo sample over the unknown
+apparatus and launch day.
+From a walking-pace launch a glider loses about \SI{\nHeightToTrim}{\meter} reaching its
+\SI{\nTrimSpeed}{\meter\per\second} flying speed, so a long flight needs a strong wind.
+Flown into that wind over the valley, none of \nSamples\ sampled cases covers
+\SI{\nTarget}{\meter}.
+Along the southwest-facing slope, in ridge lift, \SI{\nReachSlope}{\percent} do
+(\SI{95}{\percent} confidence interval \numrange{\nReachSlopeLo}{\nReachSlopeHi}\,\%), at a
 median launch wind of \SI{\nMedWindReach}{\meter\per\second}.
-Without a tail the wing diverges in pitch, with a median doubling time of
-\SI{\nTdoubleMC}{\second}, comparable to human reaction time, during a flight of about
-\SI{\nMedFlightReach}{\second}; a tail removes the divergence.
-A controlled arrival, even without a flare, does not break the legs; an arrival after loss of
-pitch control often does.
+Without a tail a pitch disturbance doubles in a median \SI{\nTdoubleMC}{\second}, comparable
+to human reaction time, in a flight of about \SI{\nMedFlightReach}{\second}; a tail removes
+the divergence.
+A controlled arrival does not break the legs; one after loss of pitch control often does.
 The account is physically possible but marginal, and the missing tail is a sufficient cause
 of the fall.
-Each step is posed as a student exercise, with worked answers.
+Each step is a student exercise with worked answers.
 \end{abstract}
 
 \input{sections/01_introduction}

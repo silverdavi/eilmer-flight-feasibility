@@ -8,6 +8,7 @@
   "section_valley_min_m": 69.5,
   "relief_abbey_above_valley_m": 10.2,
   "slope_radius_m": 400.0,
+  "site_panel_halfwidth_m": 300.0,
   "slope_mean_deg": 5.18,
   "slope_p90_deg": 12.83,
   "slope_max_deg": 28.06,

@@ -27,7 +27,7 @@ himself used to say that the cause of his failure was his forgetting to put a ta
 on the back part.
 \end{quote}
 
-\noindent The distance is a \textit{stadium}, a furlong, about \SI{200}{\meter}.
+\noindent The distance is a \textit{stadium}, a furlong, about \SI{\nTarget}{\meter}.
 
 \paragraph{S1.2 The tibia fracture threshold.}
 The \SIrange{\nTibiaLo}{\nTibiaHi}{\kilo\newton} per-leg range in \cref{fig:biomech}
@@ -40,7 +40,7 @@ tolerance by \(\sim\)10\%.
 \end{quote}
 
 \noindent The upper figure traces to \textcite{salzar2014leg}, who recommend a tibial axial
-threshold of about \SI{10.3}{\kilo\newton}, rising to about \SI{11.3}{\kilo\newton} with
+threshold of about \SI{\nTibiaSalzar}{\kilo\newton}, rising to about \SI{\nTibiaHi}{\kilo\newton} with
 the fibula.
 
 \paragraph{S1.3 The medieval wind regime.}
@@ -72,24 +72,24 @@ The analysis does not assume that medieval winds were stronger.
   The glide ratio is not sampled; it follows from aspect ratio, span efficiency, and
   zero-lift drag through \cref{eq:polar} and spans \numrange{\nLDlo}{\nLDhi}.
   The launch wind is drawn from the ERA5 southwest-sector hours at
-  \SIrange{3}{16}{\meter\per\second}.}
+  \SIrange{\nWindLo}{\nWindHi}{\meter\per\second}.}
   \label{tab:priors}
   \small
   \begin{tabular}{lll}
     \toprule
     Parameter & Range & Basis \\
     \midrule
-    Wing area & \SIrange{5}{10}{\meter\squared} & wing spanning hands to feet \\
-    All-up mass & \SIrange{70}{90}{\kilogram} & adult man and a timber frame \\
-    Trim lift coefficient \(C_L\) & \numrange{0.7}{1.1} & cambered membrane \autocite{hoerner1985lift} \\
+    Wing area & \SIrange{\nAreaLo}{\nAreaHi}{\meter\squared} & wing spanning hands to feet \\
+    All-up mass & \SIrange{\nMassLo}{\nMassHi}{\kilogram} & adult man and a timber frame \\
+    Trim lift coefficient \(C_L\) & \numrange{\nCLlo}{\nCLhi} & cambered membrane \autocite{hoerner1985lift} \\
     Aspect ratio \(A\) & \numrange{\nARlo}{\nARhi} & span of one to two arm spans \\
     Span efficiency \(e\) & \numrange{\nElo}{\nEhi} & untwisted, non-elliptical wing \autocite{drela2014flight} \\
     Zero-lift drag \(C_{D0}\) & \numrange{\nCDzlo}{\nCDzhi} & membrane, prone body, frame \autocite{hoerner1965drag,lissaman1983lowre} \\
-    Tower height & \SIrange{15}{25}{\meter} & around White's \SI{18}{\meter} \autocite{white1961eilmer} \\
-    Slope angle \(\theta_s\) & \ang{8}--\ang{18} & DEM 90th percentile as a floor \\
-    Lift efficiency \(\eta\) & \numrange{0.5}{1.0} & flow following the surface \\
+    Tower height & \SIrange{\nTowerLo}{\nTowerHi}{\meter} & around White's \SI{\nTower}{\meter} \autocite{white1961eilmer} \\
+    Slope angle \(\theta_s\) & \ang{\nSlopeLo}--\ang{\nSlopeHi} & DEM 90th percentile as a floor \\
+    Lift efficiency \(\eta\) & \numrange{\nEtaLo}{\nEtaHi} & flow following the surface \\
     CG \(\cgfrac\) & \numrange{\nCGlo}{\nCGhi}\,\(c\) & hands at leading edge, feet at trailing edge \\
-    Neutral-point shift from a tail & \numrange{0.18}{0.32}\,\(c\) & tail size \\
+    Neutral-point shift from a tail & \numrange{\nTailShiftLo}{\nTailShiftHi}\,\(c\) & tail size \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -146,7 +146,7 @@ The sink rates are \SI{\nExSinkNom}{\meter\per\second} at \LD~\num{\nLDnom} and
 \SI{\nExSinkHi}{\meter\per\second} at \LD~\num{\nLDhi}.
 On a slope of \ang{\nSlopePninety} the lift matches them at \(U \approx
 \SI{\nExUsoarNom}{\meter\per\second}\) and \SI{\nExUsoarHi}{\meter\per\second}.
-Southwest winds of \SI{8}{\meter\per\second} or more occur in \SI{\nSWEightPct}{\percent} of
+Southwest winds of \SI{\nSWStrong}{\meter\per\second} or more occur in \SI{\nSWEightPct}{\percent} of
 hours.
 The full simulation needs less wind (\SI{\nMinWindBest}{\meter\per\second} for the best wing)
 because the tower height covers part of the sink.
@@ -157,19 +157,19 @@ With state \((\alpha, q)\), the matrix \(\begin{pmatrix} Z_\alpha & 1 \\ M_\alph
 M_\alpha\) is negative, that is, when \(M_\alpha > Z_\alpha M_q\).
 Since \(M_\alpha \propto \cgfrac - \npfrac\) and \(Z_\alpha M_q > 0\), divergence begins
 slightly aft of the neutral point, at \num{\nCGonset}\,\(c\) for the nominal craft.
-At \(\cgfrac = 0.45\), \(t_2 = \SI{\nTdoubleRep}{\second}\).
-A ruler-drop test usually gives a simple reaction time of about \SI{0.2}{\second}, so the
+At \(\cgfrac = \nCGrep\), \(t_2 = \SI{\nTdoubleRep}{\second}\).
+A ruler-drop test usually gives a simple reaction time of about \SI{\nRulerDrop}{\second}, so the
 disturbance doubles about once per reaction.
 
 \paragraph{6. Monte Carlo.}
 For \(k = \nReachSlopeN\) and \(n = \nSamples\), \(\hat p = \SI{\nReachSlope}{\percent}\) and
-the Wilson half-width is close to \(1.96\sqrt{\hat p(1-\hat p)/n} \approx
+the Wilson half-width is close to \(\nWilsonZ\sqrt{\hat p(1-\hat p)/n} \approx
 \SI{\nExWilsonHalf}{\percent}\), giving \SIrange{\nReachSlopeLo}{\nReachSlopeHi}{\percent}.
 Another seed changes the fraction by about this amount.
 
 \paragraph{7. Impact.}
 The onset speeds are \SIrange{\nOnsetLo}{\nOnsetHi}{\meter\per\second}.
-At \(V = \SI{\nTrimSpeed}{\meter\per\second}\) and \ang{50}, the vertical speed is
+At \(V = \SI{\nTrimSpeed}{\meter\per\second}\) and \ang{\nExDiveAngle}, the vertical speed is
 \SI{\nExVdepFifty}{\meter\per\second}, above the onset speed for the central stopping
 distance.
 A glide into the ground at the sink rate, \SIrange{\nExSinkHi}{\nExSinkNom}{\meter\per\second},

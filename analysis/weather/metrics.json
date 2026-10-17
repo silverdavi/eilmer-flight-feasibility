@@ -118,5 +118,6 @@
       ],
       "hours_per_year": 9.0
     }
-  }
+  },
+  "strong_sw_threshold_ms": 8
 }

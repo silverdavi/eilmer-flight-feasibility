@@ -24,3 +24,15 @@ paper_source_iop/main_anon.pdf
 # Secrets / credentials
 .cdsapirc
 *.key
+
+# Figure 3 / cover renders: downloaded CC0 assets, Blender caches and intermediate renders
+.venv-bpy/
+viz/hero/assets/_dl/
+viz/hero/assets/_blender_user/
+viz/hero/assets/*.blend1
+viz/hero/final/_work/
+viz/hero/final/fig_apparatus_v*.png
+viz/hero/final/fig_apparatus_v*.pdf
+viz/hero/final/fig_apparatus_v*.svg
+viz/hero/scene/_cache/
+viz/hero/scene/cover_*.png

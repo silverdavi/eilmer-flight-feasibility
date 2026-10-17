@@ -29,15 +29,18 @@ echo "== Workstream E: impact biomechanics =="
 $PY analysis/biomech/process_biomech.py  # Fig 7 (needs montecarlo.npz)
 $PY analysis/biomech/plot_biomech.py
 
-if [ -d viz ]; then
-  echo "== Visualization: 3D web app scene and the apparatus render =="
-  $PY viz/export_scene.py                 # needs data/processed/malmesbury_dem.npz
-  $PY viz/preview_scene.py
-  # needs viz/figures/apparatus_3d.png (render_blender.py) and the cairo library (Homebrew)
-  DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib $PY viz/compose_apparatus.py
-  cp viz/figures/apparatus_hero.png figures/fig_apparatus.png
+if [ "${RENDER_FIG3:-0}" = 1 ]; then
+  echo "== Figure 3: Blender Cycles render of the nominal apparatus, then labels =="
+  # needs .venv-bpy (pip install bpy==5.0.1), the CC0 assets (viz/hero/assets/fetch_assets.sh),
+  # viz/hero/assets/monk_prone.blend, GNU timeout (brew install coreutils) and the cairo library
+  gtimeout 900 .venv-bpy/bin/python viz/hero/final/render_fig3_v5.py --shot main --pct 100 --samples 1024
+  gtimeout 600 .venv-bpy/bin/python viz/hero/final/render_fig3_v5.py --shot inset --pct 100 --samples 768
+  DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib gtimeout 300 $PY viz/hero/final/compose_fig3_v6.py \
+    viz/hero/final/_work/fig3_v5_main_render.png viz/hero/final/_work/fig3_v5_inset_render.png \
+    viz/hero/final/fig_apparatus_v6 viz/hero/final/_work/fig3_v5_points.json
+  cp viz/hero/final/fig_apparatus_v6.png figures/fig_apparatus.png
 else
-  echo "== viz/ not present: using the committed figures/fig_apparatus.png =="
+  echo "== Figure 3: using the committed figures/fig_apparatus.png (RENDER_FIG3=1 to re-render) =="
 fi
 cp data/raw/photos/water_meadows.jpg figures/fig_abbey_photo.jpg   # CC BY-SA 2.0, see SOURCE.md
 

@@ -36,6 +36,7 @@ TARGET = 200.0
 SECTOR = (191.25, 258.75)        # SW launch sector (Workstream B)
 WIND_RANGE = (3.0, 16.0)         # launchable SW speeds to sample from
 CONTROL_LOSS_MARGIN = 1.0        # depart if time_to_double < flight_time
+WILSON_Z = 1.96                  # normal quantile for 95% Wilson score intervals
 
 # sampled plausible ranges (preresearch 01/03); see Table S1
 S_AREA = (5.0, 10.0)             # wing area (m^2)
@@ -75,7 +76,7 @@ def growth_rate(x_cg, x_np, cmq, area, ar, mass, V):
     return np.where(disc >= 0, 0.5 * (tr + np.sqrt(np.abs(disc))), 0.5 * tr)
 
 
-def wilson(k, n, z=1.96):
+def wilson(k, n, z=WILSON_Z):
     if n == 0:
         return (0.0, 0.0)
     p = k / n
@@ -149,7 +150,13 @@ def main() -> None:
         **{f"{k}_{tr}": v for tr, d in out.items() for k, v in d.items()})
 
     metrics = {
-        "n_samples": N, "seed": SEED,
+        "n_samples": N, "seed": SEED, "target_m": TARGET, "wilson_z": WILSON_Z,
+        "priors": {
+            "wind_ms": list(WIND_RANGE), "sector_deg": list(SECTOR),
+            "wing_area_m2": list(S_AREA), "mass_kg": list(MASS), "cl": list(CL),
+            "aspect_ratio": list(AR), "oswald_e": list(OSWALD), "cd0": list(CD0),
+            "tower_m": list(TOWER), "slope_deg": list(SLOPE), "ridge_eff": list(RIDGE_EFF),
+            "cg": list(CG), "tail_np_shift": list(TAIL_SHIFT)},
         "wind_source": "ERA5 SW-sector launchable speeds (Workstream B)",
         "flight_model": "standing launch, point mass at fixed trim CL (analysis/aero/flight.py)",
         "tracks": metrics_tracks,
